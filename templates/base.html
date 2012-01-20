@@ -12,7 +12,11 @@
     <![endif]-->
 
     <!-- Le styles -->
+    {% if stylesheet %}
+    <link rel="stylesheet" href="/css/{{stylesheet}}">
+    {% else %}
     <link rel="stylesheet" href="/css/bootstrap.min.css">
+    {% endif %}
     <style type="text/css">
       /* Override some defaults */
       html, body {
