@@ -37,3 +37,6 @@
 		select {
 			margin-bottom:20px;
 		}
+		.featured {
+			margin-left:25px !important;
+			}
