@@ -46,7 +46,7 @@ class SiteHandler(BaseHandler):
         
         }
     
-    return self.render_response('home.html',**context)
+    return self.render_response('qshops-home.html',**context)
     
 
 
