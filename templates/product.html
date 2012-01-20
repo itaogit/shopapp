@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+
+{% block title %}{{name}} | {{shop_name}}{% endblock %}
+{% block description %}{{description |truncate(150)}}{% endblock %}
+{% block head %}
+<link rel="stylesheet" href="/css/product.css">
+{% endblock %}
+
+{% block content %}
+    <div class="page-header">
+      <h2>{{shop_name}}</h2>
+    </div>
+    <div class="row">
+    <span class="span10">
+    <ul class="breadcrumb">
+	  <li><a href="/">Home</a> <span class="divider">/</span></li>
+	  <li><a href="/{{category}}">{{category}}</a> <span class="divider">/</span></li>
+	  <li class="active">{{name}}</li>
+    </ul>
+    </span>
+    <span class="span4">
+      <a href="#" class="btn large">Go to Cart (10 items) &raquo;</a>    
+    </span>
+    </div>
+    <div class="row" itemscope itemtype="http://data-vocabulary.org/Product">
+      <div class="span9">
+		<ul class="media-grid">
+		{% for i in images %}
+		<li>
+		<a href="#">
+		<img itemprop="image" src="{% if loop.index == 1 %}{{i[0]}}" alt = "{% else %}{{i[1]}}" alt = "thumb{% endif %}-{{name}}-{{loop.index}}" class="thumbnail"/>
+		</a>
+		</li>
+	    {% endfor %}
+	    </ul>
+      </div>
+      <div class="span5">
+        <h1 itemprop="name">{{name}}</h1>
+        <ul id="socialshare">
+			<li class="facebook"><iframe
+				src="http://www.facebook.com/plugins/like.php?href=<script type="text/javascript>document.location</script>{&amp;send=false&amp;layout=button_count&amp;width=80&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font&amp;height=21"
+				scrolling="no" frameborder="0"
+				style="border: none; overflow: hidden; width: 80px; height: 21px;"
+				allowTransparency="true"></iframe></li>
+			<li class="twitter"><a href="https://twitter.com/share"
+				class="twitter-share-button" data-count="horizontal">Tweet</a> <script
+				type="text/javascript"
+				src="http://platform.twitter.com/widgets.js"></script></li>
+						</ul>
+        <p>
+	        <span itemprop="description">{{description}}</span>
+	        <ul class="tags">
+	        {% for i in tags %}
+	        	<li>{{i}}</li>
+	        {% endfor %}
+	        </ul>
+	        <label for="miniSelect">Quantity</label><select class="mini" name="quantitySelect" id="miniSelect">
+	        {% for number in range(1,quantity+1) %}
+			  <option>{{ number }}</option>
+			{% endfor %}
+	        </select>
+	        {% for option in options %}
+				{% for key,value in option.items() %}
+					<label for="mediumSelect-{{loop.index}}">{{key}}</label>
+					<select class="medium" name="{{key}}Select" id="mediumSelect-{{key}}">
+					{% for i in value %}<option>{{i}}</option>{% endfor %}
+					</select>
+				{% endfor %}
+			{% endfor %}
+			<span itemprop="offerDetails" itemscope itemtype="http://data-vocabulary.org/Offer">
+	        <p class="price">Price {% if currency == 'GBP' %}&pound;{% else %}&dollar;{% endif %}<span itemprop="price">{{price}}</span></p>
+	        <meta itemprop="availability" content="in_stock" />
+	        <meta itemprop="currency" content="{{currency}}" />
+	        <meta itemprop="quantity" content="{{quantity}}" />
+	        <meta itemprop="identifier" content="{{id}}" />
+	        </span>
+	        <a href="#" class="btn large primary pull-right">Add to Cart</a>
+        </p>
+      </div>
+    </div>
+    <div class="row">
+    <span class="4">
+    <div class="topbar" style="position:static">
+      <div class="fill">
+        <div class="container">
+          <ul class="nav">
+            <li class="active"><a href="/">Home</a></li>
+            <li><a href="/about">About</a></li>
+            <li><a href="/contact">Contact</a></li>
+            <li><a href="/sitemap">Sitemap</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+          </span> 
+    </div>
+{% endblock %}
