@@ -1,0 +1,14 @@
+*.bak
+*.pyc
+*.db
+*.svn
+*.swp
+*~
+# Temporary App Engine development server files.
+.DS_Store
+datastore
+.gaedata
+# The build manifest.
+MANIFEST
+# Binary distributed libraries. 
+jinja2
