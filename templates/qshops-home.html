@@ -1,20 +1,37 @@
 {% extends "base.html" %}
 
-{% block title %}Home{% endblock %}
+{% block title %}The shopping cart app | Welcome to Qshops{% endblock %}
 
 {% block head %}
+<link rel="stylesheet" href="/css/qshops-home.css">
 {% endblock %}
 
 {% block content %}
     <div class="page-header">
-      <h1>Shop, <small>The finest products</small></h1>
+      <h2>Qshops.net</h2>
     </div>
     <div class="row">
       <div class="span10">
-        <h2>Featured products</h2>
+        <h1>E-commerce the easy way</h1>
       </div>
       <div class="span4">
-        <h3>Not so featured products</h3>
+        <h3>&pound;999 per month</h3>
       </div>
-    </div>
+      </div>
+      <div class="row">
+      <div class="span14">
+      <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt...and this will convince them to buy!</p>
+      </div>
+      </div>
+      <div class="row">
+      <div class="span14">
+      <label for="StoreName">Store name</label>
+      <input class="medium" id="StoreName" name="xlInput" size="30" type="text">
+      <label for="Email">Email</label>
+      <input class="medium" id="Email" name="xlInput" size="30" type="text">
+      <label for="Password">Password</label>
+      <input class="medium" id="Password" name="xlInput" size="30" type="text">
+      <a href="#" class="btn large primary">Start Now!</a>
+      </div>
+      </div>
 {% endblock %}

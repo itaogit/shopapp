@@ -20,9 +20,7 @@ class PageHandler(BaseHandler):
             'stylesheet': None,
             'pagecontent': 'this is the ' + page + ' page',
         }
-        path = page + '.html'
-        logging.info('PageHandler')
-        self.render_response(path, **context)
+        self.render_response('qshops-home.html', **context)
 
 class SiteHandler(BaseHandler):
   def get(self, subdomain):
@@ -54,8 +52,8 @@ class SiteHandler(BaseHandler):
             'stylesheet': stylesheet,
         
         }
-    
-    return self.render_response('qshops-home.html',**context)
+
+    return self.render_response('home.html',**context)
     
 
 
