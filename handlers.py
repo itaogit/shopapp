@@ -34,15 +34,24 @@ class SiteHandler(BaseHandler):
     
     #site = Shop.get_by_key_name(subdomain)
     #if not site:
-    if not subdomain in ['a','b','www']:
+    if not subdomain in ['a','b','c','www']:
         
         return self.render_response('not-found.html', **context)
+    
+    if subdomain == 'a':
+        stylesheet = 'blue'
+    elif subdomain == 'b':
+        stylesheet = 'red'
+    elif subdomain == 'c':
+        stylesheet = 'green'
+    else:
+        stylesheet = 'default'
     
     context = {
             'title': subdomain,
             'pagecontent': 'this is the ' + subdomain + ' page',
             #'stylesheet': site.stylesheet,
-            'stylesheet': 'bootstrap-' + subdomain + '.min.css',
+            'stylesheet': stylesheet,
         
         }
     

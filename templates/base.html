@@ -13,11 +13,11 @@
 
     <!-- Le styles -->
     {% if stylesheet %}
-    <link rel="stylesheet" href="/css/{{stylesheet}}">
+    <link rel="stylesheet/less" href="/css/{{stylesheet}}.less">
     {% else %}
-    <link rel="stylesheet" href="/css/bootstrap.min.css">
-
+    <link rel="stylesheet/less" href="/css/default.less">
     {% endif %}
+    <script src="/js/less-1.2.1.min.js" type="text/javascript"></script>
 
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.min.js"></script>
 
