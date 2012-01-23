@@ -15,9 +15,6 @@ app = webapp2.WSGIApplication([
     routes.DomainRoute(r'<subdomain:(?!www\.)[^.]+>.<:.*>', [webapp2.Route('/', handler='handlers.SiteHandler'),
                                                              webapp2.Route('/<category>/<product>',handler='handlers.ProductHandler')]),
     webapp2.Route(r'/', handler='handlers.PageHandler'),
-                        
-    
-    webapp2.Route('/<category>/<product>', handler='handlers.ProductHandler', name='product'),
     webapp2.Route(r'/([^/]+)', 'handlers.PageHandler'),
 ])
 

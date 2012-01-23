@@ -1,6 +1,7 @@
 import webapp2
 import main
 import logging
+from models import Product
 from webapp2_extras import jinja2
 class BaseHandler(webapp2.RequestHandler):
     @webapp2.cached_property
@@ -61,23 +62,23 @@ class SiteHandler(BaseHandler):
      
 class ProductHandler(BaseHandler):
     def get(self, product=None, category=None, subdomain=None):
-        logging.info('ProductHandler')
-        if subdomain:
-            stylesheet = 'bootstrap-' + subdomain + '.min.css'
-        else:
-            stylesheet = None
+        stylesheet = None   #Should be defined in shop model
+        currency = 'GBP'    #Should be defined in shop model
+        product_data = Product()
         context = {
-                   'shop_name': 'Shop Name',
-                   'id':             '1',
-                   'name':           product,
-                   'description':    'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras imperdiet enim ac augue auctor viverra. Phasellus congue tempor justo sed cursus. Quisque non quam turpis. Curabitur mollis luctus tempor. Aliquam sit amet nisl vel arcu rutrum ornare at vel sem.',
-                   'category':       category,
-                   'price':          '%.2f' % 10.00,
-                   'images':         [('http://placehold.it/480x360.gif','http://placehold.it/100x100.gif'),('http://placehold.it/480x360.gif','http://placehold.it/100x100.gif'),('http://placehold.it/480x360.gif','http://placehold.it/100x100.gif'),('http://placehold.it/480x360.gif','http://placehold.it/100x100.gif'),('http://placehold.it/480x360.gif','http://placehold.it/100x100.gif')],
-                   'tags':           ['keyword1','keyword2','Keyword3', 'keyword4'],
-                   'quantity':       3,
-                   'options':        [{'Size':['Large','Medium','Small']},{'Colour':['Red','White','Blue']}],
-                   'currency':      'GBP',
-                   'stylesheet':    stylesheet,
+                   'shop_id'    :   product_data.shop_id,
+                   'shop_name'  :   subdomain,    #Shop Name should be referenced from Shop ID
+                   'id'         :   product_data.product_id,
+                   'name'       :   product_data.name,
+                   'description':   product_data.description,
+                   'category_id':   product_data.category_id,
+                   'category'   :   category,     #Category Name should be referenced from Category ID
+                   'price'      :   product_data.price,
+                   'images'     :   product_data.images,
+                   'tags'       :   product_data.tags,
+                   'quantity'   :   product_data.quantity,
+                   'options'    :   product_data.options,
+                   'currency'   :   currency,
+                   'stylesheet' :   stylesheet
                     }
         self.render_response('product.html',**context)

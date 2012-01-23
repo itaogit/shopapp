@@ -43,7 +43,7 @@
 		{% for i in images %}
 		<li>
 		<a class="fancybox{% if loop.index == 1 %} featured{% endif %}" rel="group" href="{{i[0]}}">
-		<img itemprop="image" src="{% if loop.index == 1 %}{{i[0]}}" alt = "{% else %}{{i[1]}}" alt = "thumb{% endif %}-{{name}}-{{loop.index}}" class="thumbnail"/>
+		<img itemprop="image" src="{% if loop.index == 1 %}{{i[0]}}" width="480px" height="360px" alt = "{% else %}{{i[1]}}" width="100px" height="100px" alt = "thumb{% endif %}-{{name}}-{{loop.index}}" class="thumbnail"/>
 		</a>
 		</li>
 	    {% endfor %}
