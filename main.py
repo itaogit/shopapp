@@ -19,9 +19,11 @@ app = webapp2.WSGIApplication([
                                                              webapp2.Route('/<category>/<product>',handler='handlers.ProductHandler'),
                                                              ]),
     webapp2.Route(r'/', handler='handlers.PageHandler'),
+
                         
     
     #webapp2.Route('/<category>/<product>', handler='handlers.ProductHandler', name='product'),
+
     webapp2.Route(r'/([^/]+)', 'handlers.PageHandler'),
 ])
 
