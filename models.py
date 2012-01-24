@@ -2,8 +2,6 @@
 import json
 from google.appengine.ext import db
 
-
-
 class Shop(db.Model):
     shopname = db.StringProperty()
     owner = db.ReferenceProperty() #User Reference
@@ -34,6 +32,9 @@ class Shop(db.Model):
     paypal_username = db.StringProperty(default=None)
     paypal_password = db.StringProperty(default=None)
     paypal_signature = db.StringProperty(default=None)
+
+
+
 
 '''Style/Template configuration, more models'''
 '''Customized CSS
@@ -196,3 +197,9 @@ class OrderDetail(db.Model):
     promo_code = db.StringProperty()
     qty = db.IntegerProperty()
     country = db.StringProperty()
+
+    
+class Image(db.Model):
+    blob_key = db.StringProperty()
+    user = db.StringProperty()
+

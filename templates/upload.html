@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}About{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="/css/upload.css">
+<script type="text/javascript">
+function deleteImage(image_key){
+	if(confirm('Are you sure you wish to remove this image?')){
+		$('#image_key').val(image_key);
+		$('#deleteForm').submit();
+	}
+}
+</script>
+{% endblock %}
+
+{% block content %}
+    			<div class="row">
+      			<div class="span14">
+                <form action="{{upload_url}}" enctype="multipart/form-data" method="post">
+                <div>
+                <label for="name">Product id:</label>
+                <input type="text" name="product_id"/>
+                <input type="file" name="file"/>
+                <input type="submit" value="Upload"></div>
+                </form>
+                <form action="/delete" id="deleteForm" name="deleteForm" method="post">
+				<input type="hidden" id="image_key" name="image_key" value="" />
+                </form>
+                </div>
+                </div>
+                
+                <div class="row">
+      			<div class="span14">
+      			<ul>{% for image in images %}
+                <li>
+				<p>Product id: {{image.key().name()[0]}} - <a href="#" onclick="deleteImage('{{image.key().name()}}')">delete [x]</a></p>
+                <img src="/_ah/img/{{image.blob_key}}=s190" />
+                </li>
+                {% endfor %}
+                </ul>
+                </div>
+                </div>
+{% endblock %}
