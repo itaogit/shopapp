@@ -2,10 +2,11 @@
 import webapp2
 import main
 import logging
-
-from models import Shop, Item, Product
-
 from webapp2_extras import jinja2
+from google.appengine.ext.webapp import blobstore_handlers
+from google.appengine.ext import blobstore
+from google.appengine.api import images
+from models import Shop, Item, Product, Image
 from google.appengine.api import namespace_manager
 from google.appengine.api import memcache
 '''End import section'''
@@ -127,17 +128,17 @@ class SiteHandler(BaseHandler):
     def set_current_namespace(self, subdomain):
         namespace_manager.set_namespace(subdomain)
         logging.info(str(namespace_manager.get_namespace()))
-        
-    
-
-
-
      
 class ProductHandler(BaseHandler):
     def get(self, product=None, category=None, subdomain=None):
         stylesheet = None   #Should be defined in shop model
         currency = 'GBP'    #Should be defined in shop model
         product_data = Product()
+        images = []
+        query = Image.gql("WHERE user = :1", subdomain)
+        for image in query:
+            if image.key().name()[0] == product_data.product_id:
+                images.append(image)
         context = {
                    'shop_id'    :   product_data.shop_id,
                    'shop_name'  :   subdomain,    #Shop Name should be referenced from Shop ID
@@ -147,7 +148,7 @@ class ProductHandler(BaseHandler):
                    'category_id':   product_data.category_id,
                    'category'   :   category,     #Category Name should be referenced from Category ID
                    'price'      :   product_data.price,
-                   'images'     :   product_data.images,
+                   'images'     :   images,
                    'tags'       :   product_data.tags,
                    'quantity'   :   product_data.quantity,
                    'options'    :   product_data.options,
@@ -155,3 +156,39 @@ class ProductHandler(BaseHandler):
                    'stylesheet' :   stylesheet
                     }
         self.render_response('product.html',**context)
+ 
+class ImageUploadHandler(BaseHandler):
+    def get(self, subdomain=None):
+        upload_url = blobstore.create_upload_url('/upload')
+        images = Image.gql("WHERE user = :1",subdomain)
+        context = {
+                   'images':        images,
+                   'upload_url':   upload_url
+                   }
+        self.render_response('upload.html',**context)
+                
+class UploadHandler(blobstore_handlers.BlobstoreUploadHandler):
+    def post(self,subdomain=None):
+        product_id=self.request.get("product_id")
+        upload_files = self.get_uploads('file')  # 'file' is file upload field in the form
+        blob_info = upload_files[0]  
+        for i in range(0,5):
+            count = Image.gql("WHERE __key__=KEY('Image','%s-%s') LIMIT 1" % (product_id,i)).count()
+            if count == 0:
+                image = Image(blob_key=str(blob_info.key()),key_name='%s-%s' %(product_id, i),user=subdomain)
+                image.put()
+                self.redirect('/serve/%s' % blob_info.key())
+                break;
+        self.response.out.write('Maximum number of images for this product id, please delete one before uploading.'),
+class ServeHandler(webapp2.RequestHandler):
+    def get(self,resource,subdomain=None):
+        logging.info('serve')
+        self.response.out.write("%s %s" % (images.get_serving_url(resource, 100),
+        images.get_serving_url(resource, 480)))
+        
+class DeleteImageHandler(webapp2.RequestHandler):
+    def post(self, image_key=None, subdomain=None):
+        image_key = self.request.get('image_key')
+        image = Image.get_by_key_name(image_key)
+        image.delete()
+        self.redirect(webapp2.uri_for('imageupload'))
