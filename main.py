@@ -3,6 +3,7 @@ import webapp2
 import handlers
 from webapp2_extras import routes
 
+
 ''''''
 
 
@@ -10,7 +11,9 @@ from webapp2_extras import routes
 app = webapp2.WSGIApplication([
     #Main site
     routes.DomainRoute( settings.DOMAIN, [webapp2.Route('/', handler='handlers.PageHandler'),
+
                                           ]),
+
     #Subsites
     routes.DomainRoute(r'<subdomain:(?!www\.)[^.]+>.<:.*>', [webapp2.Route('/', handler='handlers.SiteHandler'),
                                                              webapp2.Route('/imageupload', handler='handlers.ImageUploadHandler', name='imageupload'),
@@ -23,9 +26,19 @@ app = webapp2.WSGIApplication([
                                                              webapp2.Route('/shoppingarea/<to_cache>',handler='handlers.ShoppingAreaHandler'),
                                                              webapp2.Route('/<category>/<product>',handler='handlers.ProductHandler'),
                                                              ]),
-                                                             webapp2.Route(r'/', handler='handlers.PageHandler'),
-                                                             webapp2.Route(r'/([^/]+)', 'handlers.PageHandler'),
-                                                            ])
+
+    #Testing
+    routes.PathPrefixRoute(r'/test', [webapp2.Route('/', handler='tests.MainTest', name='test-overview'),
+                                       
+                                       ]),
+
+                        
+    
+    #Localhost
+    webapp2.Route(r'/', 'handlers.PageHandler'),
+    webapp2.Route(r'/([^/]+)', 'handlers.PageHandler'),
+])
+
 
 def main():
   run_wsgi_app(app)
