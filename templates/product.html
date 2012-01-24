@@ -29,8 +29,8 @@
 		{% for i in images %}
 		<span id="{% if loop.index == 1 %}featured{%else%}thumb{{loop.index}}{% endif %}">
 		<li>
-		<a class="custombox" rel="group" href="/_ah/img/{{i.blob_key}}=s480">
-		<img itemprop="image" src="/_ah/img/{{i.blob_key}}{% if loop.index == 1 %}=s480" width="480px" height="360px" alt = "{% else %}=s100" width="100px" height="100px" alt = "thumb{% endif %}-{{name}}-{{loop.index}}"/>
+		<a class="custombox" rel="group" href="{{imagelinker(i)}}">
+		<img itemprop="image" src="{% if loop.index == 1 %}{{imagelinker(i)}}" width="480px" height="360px" alt = "{% else %}{{imagelinker(i,'100')}}" width="100px" height="100px" alt = "thumb{% endif %}-{{name}}-{{loop.index}}"/>
 		</a>
 		</li>
 		</span>
