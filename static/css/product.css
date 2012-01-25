@@ -1,31 +1,3 @@
-label {
-	margin-right: 20px;
-}
-
-#socialshare {
-	position: relative;
-	left: 0;
-	top: 0;
-	width: auto;
-	height: auto;
-	list-style: none;
-	padding: 0;
-	margin-left:10px;
-}
-
-#socialshare li {
-	position: relative;
-	left: 0;
-	top: 0;
-	height: auto;
-	overflow: hidden;
-	float: left;
-}
-
-.fb_edge_widget_with_comment span.fb_edge_comment_widget iframe.fb_ltr {
-	display: none !important;
-}
-
 .tags {
 	margin: 15px 0 20px 0;
 }

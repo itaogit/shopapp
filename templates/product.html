@@ -5,16 +5,6 @@
 {% block head %}
 <link rel="stylesheet" href="/css/product.css">
 <script type="text/javascript" src="/js/custombox.js"></script>
-<!-- Render call for Google +1 button -->
-<script type="text/javascript">
-  window.___gcfg = {lang: 'en-GB'};
-
-  (function() {
-    var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
-    po.src = 'https://apis.google.com/js/plusone.js';
-    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
-  })();
-</script>
 <script type="text/javascript">
 $(document).ready(function() {
 	$('#addtocart').live('click', function() {
@@ -64,7 +54,7 @@ $(document).ready(function() {
 			<li class="facebook">
 				<div id="fb-root"></div>
 				<script type="text/javascript">_ga.trackFacebook();</script>
-				<fb:like href="http://a.localhost:8085/category/product" send="false" layout="button_count" width="80" show_faces="false"></fb:like>
+				<script type='text/javascript'>document.write('<fb:like href="'+document.location+'" send="false" layout="button_count" width="80" show_faces="false"></fb:like>');</script>
 			</li>
 			<li class="twitter">
 				<a href="https://twitter.com/share"	class="twitter-share-button" data-count="horizontal">Tweet</a>
@@ -122,27 +112,3 @@ $(document).ready(function() {
           </span> 
     </div>
 {% endblock %}
-{% block footer %}
- <!-- Google Analytics Social Button Tracking -->
-  <script src="https://s3.amazonaws.com/ha_js/ga_social_tracking.js"></script>
-
-  <!-- Facebook async loading of JSAPI -->
-  <div id="fb-root"></div>
-  <script>
-    // Facebook async loading.
-    (function() {
-      var e = document.createElement('script'); e.async = true;
-      e.src = document.location.protocol +
-        '//connect.facebook.net/en_US/all.js';
-      document.getElementById('fb-root').appendChild(e);
-    }());
-
-    window.fbAsyncInit = function() {
-      FB.init({appId: '164838206912600', status: true, cookie: true,
-               xfbml: true});
-
-      _ga.trackFacebook();
-    };
-
-  </script>
- {% endblock %}
