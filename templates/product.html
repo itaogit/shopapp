@@ -5,6 +5,17 @@
 {% block head %}
 <link rel="stylesheet" href="/css/product.css">
 <script type="text/javascript" src="/js/custombox.js"></script>
+<script type="text/javascript">
+$(document).ready(function() {
+	$('#addtocart').live('click', function() {
+		$(this).attr('id','gotocart');
+		$(this).attr('href','/cart');
+		$(this).attr('class',$(this).attr('class').replace('primary','success'));
+		$(this).text('Item/s added: Go to cart');
+		return false;
+		});
+});
+</script>
 {% endblock %}
 
 {% block content %}
@@ -39,17 +50,20 @@
       </div>
       <div class="span5">
         <h1 itemprop="name">{{name}}</h1>
-        <ul id="socialshare">
-			<li class="facebook"><iframe
-				src="http://www.facebook.com/plugins/like.php?href=<script type="text/javascript>document.location</script>{&amp;send=false&amp;layout=button_count&amp;width=80&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font&amp;height=21"
-				scrolling="no" frameborder="0"
-				style="border: none; overflow: hidden; width: 80px; height: 21px;"
-				allowTransparency="true"></iframe></li>
-			<li class="twitter"><a href="https://twitter.com/share"
-				class="twitter-share-button" data-count="horizontal">Tweet</a> <script
-				type="text/javascript"
-				src="http://platform.twitter.com/widgets.js"></script></li>
-						</ul>
+		<ul id="socialshare">
+			<li class="facebook">
+				<div id="fb-root"></div>
+				<script type="text/javascript">_ga.trackFacebook();</script>
+				<script type='text/javascript'>document.write('<fb:like href="'+document.location+'" send="false" layout="button_count" width="80" show_faces="false"></fb:like>');</script>
+			</li>
+			<li class="twitter">
+				<a href="https://twitter.com/share"	class="twitter-share-button" data-count="horizontal">Tweet</a>
+				<script	type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+			</li>
+			<li>
+				<div class="g-plusone" data-size="tall" data-annotation="none"></div>
+			</li>
+		</ul>
         <p>
 	        <span itemprop="description">{{description}}</span>
 	        <ul class="tags">
@@ -57,11 +71,6 @@
 	        	<li>{{i}}</li>
 	        {% endfor %}
 	        </ul>
-	        <label for="miniSelect">Quantity</label><select class="mini" name="quantitySelect" id="miniSelect">
-	        {% for number in range(1,quantity+1) %}
-			  <option>{{ number }}</option>
-			{% endfor %}
-	        </select>
 	        {% for option in options %}
 				{% for key,value in option.items() %}
 					<label for="mediumSelect-{{loop.index}}">{{key}}</label>
@@ -70,6 +79,11 @@
 					</select>
 				{% endfor %}
 			{% endfor %}
+			<label for="miniSelect">Quantity</label><select class="mini" name="quantitySelect" id="miniSelect">
+	        {% for number in range(1,quantity+1) %}
+			  <option>{{ number }}</option>
+			{% endfor %}
+	        </select>
 			<span itemprop="offerDetails" itemscope itemtype="http://data-vocabulary.org/Offer">
 	        <p class="price">Price {% if currency == 'GBP' %}&pound;{% else %}&dollar;{% endif %}<span itemprop="price">{{price}}</span></p>
 	        <meta itemprop="availability" content="in_stock" />
@@ -77,7 +91,7 @@
 	        <meta itemprop="quantity" content="{{quantity}}" />
 	        <meta itemprop="identifier" content="{{id}}" />
 	        </span>
-	        <a href="#" class="btn large primary pull-right">Add to Cart</a>
+	        <a href="#" id="addtocart" class="btn large primary pull-right">Add to Cart</a>
         </p>
       </div>
     </div>

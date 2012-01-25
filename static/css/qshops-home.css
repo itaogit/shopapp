@@ -1,0 +1,16 @@
+#signup-form {
+	padding:25px 0 25px 0;	
+}
+
+.row input {
+	float: left;
+	width: 130px;
+}
+
+.row label {
+	width: 70px;
+}
+
+a.btn.large.primary {
+	margin: -5px 0 0 25px;
+}

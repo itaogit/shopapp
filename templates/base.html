@@ -56,7 +56,7 @@
       /* Styles you shouldn't keep as they are for displaying this base example only */
       .content .span9,
       .content .span5 {
-        min-height: 500px;
+        min-height: 250px;
         margin-top:20px;
       }
       /* Give a quick and non-cross-browser friendly divider */
@@ -72,6 +72,17 @@
     <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
     <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
     <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
+    
+    <!-- Render call for Google +1 button -->
+	<script type="text/javascript">
+	  window.___gcfg = {lang: 'en-GB'};
+	
+	  (function() {
+	    var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+	    po.src = 'https://apis.google.com/js/plusone.js';
+	    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+	  })();
+	</script>
     {% block head %}{% endblock %}
   </head>
 
@@ -88,6 +99,27 @@
       </footer>
 
     </div> <!-- /container -->
+ <!-- Google Analytics Social Button Tracking -->
+  <script src="https://s3.amazonaws.com/ha_js/ga_social_tracking.js"></script>
 
+  <!-- Facebook async loading of JSAPI -->
+  <div id="fb-root"></div>
+  <script>
+    // Facebook async loading.
+    (function() {
+      var e = document.createElement('script'); e.async = true;
+      e.src = document.location.protocol +
+        '//connect.facebook.net/en_US/all.js';
+      document.getElementById('fb-root').appendChild(e);
+    }());
+
+    window.fbAsyncInit = function() {
+      FB.init({appId: '164838206912600', status: true, cookie: true,
+               xfbml: true});
+
+      _ga.trackFacebook();
+    };
+
+  </script>
   </body>
 </html>
