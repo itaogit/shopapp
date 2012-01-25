@@ -15,6 +15,17 @@
     var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
   })();
 </script>
+<script type="text/javascript">
+$(document).ready(function() {
+	$('#addtocart').live('click', function() {
+		$(this).attr('id','gotocart');
+		$(this).attr('href','/cart');
+		$(this).attr('class',$(this).attr('class').replace('primary','success'));
+		$(this).text('Item/s added: Go to cart');
+		return false;
+		});
+});
+</script>
 {% endblock %}
 
 {% block content %}
@@ -90,7 +101,7 @@
 	        <meta itemprop="quantity" content="{{quantity}}" />
 	        <meta itemprop="identifier" content="{{id}}" />
 	        </span>
-	        <a href="#" class="btn large primary pull-right">Add to Cart</a>
+	        <a href="#" id="addtocart" class="btn large primary pull-right">Add to Cart</a>
         </p>
       </div>
     </div>
