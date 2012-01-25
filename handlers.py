@@ -134,11 +134,6 @@ class ProductHandler(BaseHandler):
         stylesheet = None   #Should be defined in shop model
         currency = 'GBP'    #Should be defined in shop model
         product_data = Product()
-        images = []
-        query = Image.gql("WHERE user = :1", subdomain)
-        for image in query:
-            if image.key().name()[0] == product_data.product_id:
-                images.append(image)
         context = {
                    'shop_id'    :   product_data.shop_id,
                    'shop_name'  :   subdomain,    #Shop Name should be referenced from Shop ID
@@ -148,22 +143,24 @@ class ProductHandler(BaseHandler):
                    'category_id':   product_data.category_id,
                    'category'   :   category,     #Category Name should be referenced from Category ID
                    'price'      :   product_data.price,
-                   'images'     :   images,
+                   'images'     :   product_data.images,
                    'tags'       :   product_data.tags,
                    'quantity'   :   product_data.quantity,
                    'options'    :   product_data.options,
                    'currency'   :   currency,
-                   'stylesheet' :   stylesheet
+                   'stylesheet' :   stylesheet,
+                   'imagelinker':   image_linker
                     }
         self.render_response('product.html',**context)
  
 class ImageUploadHandler(BaseHandler):
     def get(self, subdomain=None):
         upload_url = blobstore.create_upload_url('/upload')
-        images = Image.gql("WHERE user = :1",subdomain)
+        images = ['1-1','1-2']
         context = {
                    'images':        images,
-                   'upload_url':   upload_url
+                   'upload_url':   upload_url,
+                   'imagelinker':   image_linker
                    }
         self.render_response('upload.html',**context)
                 
@@ -177,14 +174,20 @@ class UploadHandler(blobstore_handlers.BlobstoreUploadHandler):
             if count == 0:
                 image = Image(blob_key=str(blob_info.key()),key_name='%s-%s' %(product_id, i),user=subdomain)
                 image.put()
-                self.redirect('/serve/%s' % blob_info.key())
+                self.redirect('/serve/%s-%s' % (product_id,i))
                 break;
         self.response.out.write('Maximum number of images for this product id, please delete one before uploading.'),
+
 class ServeHandler(webapp2.RequestHandler):
     def get(self,resource,subdomain=None):
-        logging.info('serve')
-        self.response.out.write("%s %s" % (images.get_serving_url(resource, 100),
-        images.get_serving_url(resource, 480)))
+        size = self.request.get("size",480)
+        self.response.out.write(image_linker(self,resource,size,subdomain))
+
+def image_linker(resource,size=480, subdomain=None):
+    image = Image.get_by_key_name(resource)
+    if image:
+        if image.blob_key:
+            return images.get_serving_url(image.blob_key, int(size))
         
 class DeleteImageHandler(webapp2.RequestHandler):
     def post(self, image_key=None, subdomain=None):

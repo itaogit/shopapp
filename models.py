@@ -206,7 +206,6 @@ class OrderDetail(db.Model):
     promo_code = db.StringProperty()
     qty = db.IntegerProperty()
     country = db.StringProperty()
-
     
 class Image(db.Model):
     blob_key = db.StringProperty()

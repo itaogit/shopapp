@@ -32,10 +32,11 @@ function deleteImage(image_key){
                 
                 <div class="row">
       			<div class="span14">
-      			<ul>{% for image in images %}
+      			<ul>
+      			{% for image in images %}
                 <li>
-				<p>Product id: {{image.key().name()[0]}} - <a href="#" onclick="deleteImage('{{image.key().name()}}')">delete [x]</a></p>
-                <img src="/_ah/img/{{image.blob_key}}=s190" />
+				<p>Product id: {{image[0]}} - <a href="#" onclick="deleteImage('image')">delete [x]</a></p>
+                <img src="{{imagelinker(image,'200')}}" />
                 </li>
                 {% endfor %}
                 </ul>
