@@ -5,17 +5,21 @@
 {% block head %}
 <link rel="stylesheet" href="/css/product.css">
 <script type="text/javascript" src="/js/custombox.js"></script>
-<script type="text/javascript">
-$(document).ready(function() {
-	$('#addtocart').live('click', function() {
-		$(this).attr('id','gotocart');
-		$(this).attr('href','/cart');
-		$(this).attr('class',$(this).attr('class').replace('primary','success'));
-		$(this).text('Item/s added: Go to cart');
-		return false;
-		});
-});
-</script>
+			<script>
+            $(function() {
+              var btn = $('#addtocart').live("click", function() {
+                btn.button('loading')
+                $(this).attr('class',$(this).attr('class').replace('primary','success'))
+                $(this).attr('id','gotocart')
+                setTimeout(function () {
+                  btn.button('reset')
+                }, 3000)
+              })
+              $('#gotocart').live("click", function() {
+            	  document.location='/cart';
+              });
+        	})
+          </script>
 {% endblock %}
 
 {% block content %}
@@ -91,7 +95,7 @@ $(document).ready(function() {
 	        <meta itemprop="quantity" content="{{quantity}}" />
 	        <meta itemprop="identifier" content="{{id}}" />
 	        </span>
-	        <a href="#" id="addtocart" class="btn large primary pull-right">Add to Cart</a>
+			<button id="addtocart" data-loading-text="loading..." data-reset-text="Added! Go to Cart" class="btn large primary pull-right">Add to Cart</button>
         </p>
       </div>
     </div>
