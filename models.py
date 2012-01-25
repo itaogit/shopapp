@@ -1,5 +1,6 @@
 #Better performance of json in Python 2.7
 import json
+import google.appengine.api.images
 from google.appengine.ext import db
 
 class Shop(db.Model):
@@ -51,8 +52,8 @@ class Category(db.Model):
     description = db.TextProperty()
     tax_percent = db.FloatProperty()
     '''JSON OBJECT
-        * [{'1':3},{'2':5},(...)] --> Meaning: 1 object, £3; 2 objects, £5 
-        * It needs of serialization and deserealization before storing and getting operations
+       # * [{'1':3},{'2':5},(...)] --> Meaning: 1 object, $3; 2 objects, $5 
+       # * It needs of serialization and deserealization before storing and getting operations
     '''
     _price_of_delivery = db.StringProperty() #it probably needs discussion
     
@@ -69,8 +70,8 @@ class Category(db.Model):
 
 class Product(db.Expando):
     '''The properties of an Expando class are dynamic and can be added in runtime'''
-    productname = db.StringProperty(required=True)
-    shop_id = db.ReferenceProperty(required=True)
+    productname = db.StringProperty()
+    shop_id = db.ReferenceProperty()
     
     name = db.StringProperty()
     description = db.TextProperty()
@@ -78,7 +79,7 @@ class Product(db.Expando):
     '''List of blobs, BlobStore can't be associated with namespaces
        * The filtering has to be done at DataStore level
     '''
-    images = db.ListProperty(db.Blob)
+    images = db.ListProperty(db.BlobKey)
     tags = db.StringListProperty()
     stock = db.IntegerProperty()
     '''JSON OBJECT
@@ -110,12 +111,20 @@ class Product(db.Expando):
         self.tags[index] = data
     
     #Image access
-    def add_image(self, blob_image, index):
+    def add_image(self, blob_key, index):
         self.images[index] = data
-    def get_image(self, index):
-        return self.images[index]
-    def get_images(self):
-        return self.images
+    def delete_image(self, index):
+        del self.images[index]
+        
+    def get_image(self, index, size=None):
+        return get_serving_url(self.images[index], size)
+    
+    def get_images(self, size=None):
+        serving_urls = []
+        for k in self.images:
+            serving_urls.append(get_serving_url(k, size))
+        return serving_urls
+    
     
     def set_new_price(self, price):
         self.price = price
@@ -142,7 +151,7 @@ class Order(db.Model):
     
     created = db.DateTimeProperty(auto_now_add=True)
     updated = db.DateTimeProperty(auto_now=True)
-    user = db.ReferenceProperty(User)
+    #user = db.ReferenceProperty(User)
     total = db.IntegerProperty()
     sessionno = db.StringProperty()
     total_price = db.FloatProperty() 
@@ -155,7 +164,7 @@ class Order(db.Model):
     cart_key = db.StringProperty()
     promo_code = db.StringProperty()
     
-    @propery
+    @property
     def order_no(self):
         return self.key()
     
@@ -203,3 +212,6 @@ class Image(db.Model):
     blob_key = db.StringProperty()
     user = db.StringProperty()
 
+class Item(db.Model):
+    name = db.StringProperty()
+    qty = db.IntegerProperty()
