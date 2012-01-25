@@ -1,5 +1,6 @@
 #Better performance of json in Python 2.7
 import json
+import webapp2
 import google.appengine.api.images
 from google.appengine.ext import db
 
@@ -50,7 +51,7 @@ class Shop(db.Model):
 class Category(db.Model):
     categoryname = db.StringProperty(required=True)
     description = db.TextProperty()
-    tax_percent = db.FloatProperty()
+    
     '''JSON OBJECT
        # * [{'1':3},{'2':5},(...)] --> Meaning: 1 object, $3; 2 objects, $5 
        # * It needs of serialization and deserealization before storing and getting operations
@@ -61,7 +62,7 @@ class Category(db.Model):
     @property
     def products(self):
         ''' Category - Product (Many to Many relationship)'''
-        return Contact.gql("WHERE categories = :1", self.key())
+        return Product.gql("WHERE categories IN :1", self.key())
     
     def set_delivery(self, delivery_dict):
         self._price_of_delivery = json.dumps(delivery_dict)
@@ -70,18 +71,24 @@ class Category(db.Model):
 
 class Product(db.Expando):
     '''The properties of an Expando class are dynamic and can be added in runtime'''
-    productname = db.StringProperty()
+    
     shop_id = db.ReferenceProperty()
     
     name = db.StringProperty()
     description = db.TextProperty()
     price = db.FloatProperty()
+    tax_percent = db.FloatProperty()
+    tax_code = db.StringProperty()
     '''List of blobs, BlobStore can't be associated with namespaces
        * The filtering has to be done at DataStore level
     '''
     images = db.ListProperty(db.BlobKey)
     tags = db.StringListProperty()
+    
+    '''STOCK'''
     stock = db.IntegerProperty()
+    reserved = db.IntegerProperty()
+    
     '''JSON OBJECT
         * [{'Size':['Large','Medium','Small']},{'Colour':['Red','White','Blue']},(...)]
         * It needs of serialization and deserealization before storing and getting operations
@@ -100,11 +107,26 @@ class Product(db.Expando):
         return json.loads(self._options)
     
     #stock access
+    @classmethod
     def add_stock(self,qty):
         self.stock += qty
+    @classmethod
     def remove_stock(self,qty):
-        if qty > self.stock: raise ValueError, "Stock insuficient"
+        if qty > self.stock: raise ValueError, "Stock insufficient"
         else: self.stock -= qty
+    @classmethod
+    def reserve(self,qty):
+        if (self.stock - self.reserved - qty) >= 0:
+            self.stock -= qty
+            self.reserved += qty
+            return True
+        else:
+            return False
+        
+    #price
+    @property
+    def final_price(self):
+        return self.price + self.price * self.tax_percent /100
     
     #tagging
     def set_tag(self, data, index):
@@ -145,6 +167,9 @@ class Product(db.Expando):
             self.categories.remove(cat)
     
 
+
+    
+
 ''' Order Model represents a users purchase '''
 class Order(db.Model):
     #cart = db.StringProperty()
@@ -161,17 +186,34 @@ class Order(db.Model):
     payment_method = db.StringProperty()
     delivery_price = db.FloatProperty()
     delivery_name = db.StringProperty()
-    cart_key = db.StringProperty()
+    cart_key = db.StringProperty() #Comes from the session
     promo_code = db.StringProperty()
+    
+    
+    
+    @classmethod
+    def get_or_insert_with_flag(cls, key_name, **kwds):
+        def txn():
+            new = False
+            entity = cls.get_by_key_name(key_name)
+            if entity is None:
+                new = True
+                entity = cls.create(key_name=key_name, **kwds)
+                cls.generate_details(parent=key_name, stored_cart=cart_key)
+                entity.put()
+            return (entity, new)
+        return run_in_transaction(txn)
+    
+    @classmethod
+    def last_order(cls):
+        query = cls.all(keys_only=True)
+        query.order('-created')
+        return query.get()
     
     @property
     def order_no(self):
-        return self.key()
+        return self.key().id_or_name()
     
-    @classmethod
-    def get_all(cls):
-        orders = cls.all()
-        return orders
     
     @classmethod
     def get_by_user(cls,user):
@@ -201,12 +243,17 @@ class OrderDetail(db.Model):
     category = db.StringListProperty()
     author = db.StringProperty()
     price_before_tax = db.FloatProperty()
-    price_after_tax = db.FloatProperty()
+    tax_price = db.FloatProperty()
     status = db.StringProperty() #CHARGED OR VOUCHER
     promo_code = db.StringProperty()
     qty = db.IntegerProperty()
     country = db.StringProperty()
     
+    
+    @property
+    def total_price(self):
+        return self.price_before_tax + self.tax_price
+  
 class Image(db.Model):
     blob_key = db.StringProperty()
     user = db.StringProperty()
