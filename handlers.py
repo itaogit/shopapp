@@ -120,7 +120,29 @@ class SiteHandler(BaseHandler):
                 'pagecontent': 'this is the ' + subdomain + ' page',
                 #'stylesheet': site.stylesheet,
                 'stylesheet': stylesheet,
-            
+                #######    dummy data    #######
+                'shop_name':    'Shop Name',
+                'shop_description': 'Shop desc',
+                'categories':   ['cat1','cat2','cat3'],
+                'products': [{'name':'product1','category':'category','images':['http://placehold.it/110x110','http://placehold.it/110x110']},                         
+                             {'name':'product2','category':'category','images':['http://placehold.it/110x110','http://placehold.it/110x110']},
+                             {'name':'product3','category':'category','images':['http://placehold.it/110x110','http://placehold.it/110x110']},
+                             {'name':'product4','category':'category','images':['http://placehold.it/110x110','http://placehold.it/110x110']},
+                             {'name':'product5','category':'category','images':['http://placehold.it/110x110','http://placehold.it/110x110']},
+                             {'name':'product6','category':'category','images':['http://placehold.it/110x110','http://placehold.it/110x110']},
+                             {'name':'product7','category':'category','images':['http://placehold.it/110x110','http://placehold.it/110x110']},
+                             {'name':'product8','category':'category','images':['http://placehold.it/110x110','http://placehold.it/110x110']},
+                             {'name':'product9','category':'category','images':['http://placehold.it/110x110','http://placehold.it/110x110']},
+                             {'name':'product10','category':'category','images':['http://placehold.it/110x110','http://placehold.it/110x110']},
+                             {'name':'product11','category':'category','images':['http://placehold.it/110x110','http://placehold.it/110x110']},
+                             {'name':'product12','category':'category','images':['http://placehold.it/110x110','http://placehold.it/110x110']},
+                             ],
+                'cart_total':0,
+                'page':1,
+                'pages':6,
+                'currency': 'GBP',
+                'imagelinker':   image_linker,
+                #######    dummy data    #######
             }
         
         return self.render_response('home.html',**context)

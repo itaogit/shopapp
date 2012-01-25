@@ -23,15 +23,15 @@ $(document).ready(function() {
       <h2>{{shop_name}}</h2>
     </div>
     <div class="row">
-    <span class="span10">
+    <div class="span10">
     <ul class="breadcrumb">
 	  <li><a href="/">Home</a> <span class="divider">/</span></li>
 	  <li><a href="/{{category}}">{{category}}</a> <span class="divider">/</span></li>
 	  <li class="active">{{name}}</li>
     </ul>
-    </span>
+    </div>
     <span class="span4">
-      <a href="#" class="btn large">Go to Cart (10 items) &raquo;</a>    
+      <a href="/cart" class="btn large">Go to Cart (10 items) &raquo;</a>    
     </span>
     </div>
     <div class="row" itemscope itemtype="http://data-vocabulary.org/Product">
@@ -96,7 +96,6 @@ $(document).ready(function() {
       </div>
     </div>
     <div class="row">
-    <span class="4">
     <div class="topbar" style="position:static">
       <div class="fill">
         <div class="container">
@@ -109,6 +108,5 @@ $(document).ready(function() {
         </div>
       </div>
     </div>
-          </span> 
     </div>
 {% endblock %}
