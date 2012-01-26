@@ -2,7 +2,7 @@
 import webapp2
 import main
 import logging
-from webapp2_extras import jinja2
+from webapp2_extras import jinja2, sessions
 from google.appengine.ext.webapp import blobstore_handlers
 from google.appengine.ext import blobstore
 from google.appengine.api import images
@@ -24,6 +24,8 @@ class BaseHandler(webapp2.RequestHandler):
 
 class PageHandler(BaseHandler):
     def get(self, page='home'):
+        self.session()
+        
         context = {
             'title': page,
             'stylesheet': None,
@@ -34,6 +36,7 @@ class PageHandler(BaseHandler):
 
 class CreateShopHandler(BaseHandler):
     def get(self, subdomain):
+        
         '''Saving current namespace'''
         namespace = namespace_manager.get_namespace()
         '''Changing the namespace'''

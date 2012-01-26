@@ -4,16 +4,9 @@
     ***
 
 '''
-
-
-
 from __future__ import division
 import handlers
 from google.appengine.ext import db
-
-
-
-
     
 class Cart():
     '''Object that won't be persistent in the datastore'''
@@ -73,7 +66,8 @@ class Cart():
     def total_tax(self):
         sum = 0
         for i in self.items:
-            sum += i.tax 
+            sum += i.tax
+        #It is important those values to be float, if not the division is floored
         sum +=  self.delivery['price'] / (100+self.VAT_RATE) * self.VAT_RATE
         return sum
     

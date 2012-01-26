@@ -113,7 +113,9 @@ class Product(db.Expando):
     @classmethod
     def remove_stock(self,qty):
         if qty > self.stock: raise ValueError, "Stock insufficient"
-        else: self.stock -= qty
+        else:
+            self.reserved -= qty 
+            self.stock -= qty
     @classmethod
     def reserve(self,qty):
         if (self.stock - self.reserved - qty) >= 0:
