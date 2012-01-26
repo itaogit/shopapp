@@ -9,6 +9,7 @@ from google.appengine.api import images
 from models import Shop, Product, Image, Item
 from google.appengine.api import namespace_manager
 from google.appengine.api import memcache
+#
 '''End import section'''
 
 class BaseHandler(webapp2.RequestHandler):
