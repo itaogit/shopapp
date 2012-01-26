@@ -3,18 +3,80 @@
 {% block title %}Home{% endblock %}
 
 {% block head %}
+<script type="text/javascript">
+$(document).ready(function() {
+	$('.quickadd').click(function() {
+		alert('Add to Cart Handler');
+		return false;
+		});
+	$('.pagination li').click(function() {
+		alert('Pagination Handler');
+		return false;
+		});
+});
+</script>
 {% endblock %}
 
 {% block content %}
     <div class="page-header">
-      <h1>Home <small>Welcome to my homepage</small></h1>
+      <h1>{{shop_name}}</h1>
     </div>
     <div class="row">
-      <div class="span10">
-        <h2>Main content</h2>
-      </div>
+    <div class="span4">
+		<form class="pull-left" action="">
+            <input type="text" placeholder="Search">
+    	</form>
+    </div>
+    <div class="span4 offset6">
+      <a href="/cart" class="btn large">Go to Cart ({{cart_total}} items) &raquo;</a>
+    </div>
+    </div>
+    <div class="row">
       <div class="span4">
-        <h3>Secondary content</h3>
+         <h4>Categories</h4>
+         <ul>
+         <li><a href="/">Show all items</a></li>
+         {% for category in categories %}
+         <li><a href='/{{category}}'>{{category}}</a></li>
+         {% endfor %}
+         </ul>
       </div>
+      <div class="span10">
+	      <ul class="media-grid">
+	      {% for product in products %}
+	      <li><a href="{{product.category}}/{{product.name}}">
+	      <img class="thumbnail" src="{{product.images[0]}}" alt="{{product.name}}"></a>
+	      <img class="quickadd" src="images/icons/plus_alt_24x24.png" />
+	      </li>
+	      {% endfor %}
+	      </ul>		
+      </div>
+    </div>
+	<div class="row">
+    <div class="span10 offset4">
+    <div class="pagination">
+	  <ul>
+	    <li class="prev{% if page == 1 %} disabled{% endif %}"><a href="#">&larr; Previous</a></li>
+	    {% for i in range(1,pages+1) %}
+	    <li{% if i == page %} class="active"{% endif %}><a href="#">{{i}}</a></li>
+	    {% endfor %}
+	    <li class="next{% if page == pages %} disabled{% endif %}"><a href="#">Next &rarr;</a></li>
+	  </ul>
+	</div>
+    </div>
+    </div>
+    <div class="row">
+    <div class="topbar" style="position:static">
+      <div class="fill">
+        <div class="container">
+          <ul class="nav">
+            <li class="active"><a href="/">Home</a></li>
+            <li><a href="/about">About</a></li>
+            <li><a href="/contact">Contact</a></li>
+            <li><a href="/sitemap">Sitemap</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
     </div>
 {% endblock %}

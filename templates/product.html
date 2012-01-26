@@ -5,17 +5,21 @@
 {% block head %}
 <link rel="stylesheet" href="/css/product.css">
 <script type="text/javascript" src="/js/custombox.js"></script>
-<script type="text/javascript">
-$(document).ready(function() {
-	$('#addtocart').live('click', function() {
-		$(this).attr('id','gotocart');
-		$(this).attr('href','/cart');
-		$(this).attr('class',$(this).attr('class').replace('primary','success'));
-		$(this).text('Item/s added: Go to cart');
-		return false;
-		});
-});
-</script>
+			<script>
+            $(function() {
+              var btn = $('#addtocart').live("click", function() {
+                btn.button('loading')
+                $(this).attr('class',$(this).attr('class').replace('primary','success'))
+                $(this).attr('id','gotocart')
+                setTimeout(function () {
+                  btn.button('reset')
+                }, 3000)
+              })
+              $('#gotocart').live("click", function() {
+            	  document.location='/cart';
+              });
+        	})
+          </script>
 {% endblock %}
 
 {% block content %}
@@ -23,15 +27,15 @@ $(document).ready(function() {
       <h2>{{shop_name}}</h2>
     </div>
     <div class="row">
-    <span class="span10">
+    <div class="span10">
     <ul class="breadcrumb">
 	  <li><a href="/">Home</a> <span class="divider">/</span></li>
 	  <li><a href="/{{category}}">{{category}}</a> <span class="divider">/</span></li>
 	  <li class="active">{{name}}</li>
     </ul>
-    </span>
+    </div>
     <span class="span4">
-      <a href="#" class="btn large">Go to Cart (10 items) &raquo;</a>    
+      <a href="/cart" class="btn large">Go to Cart (10 items) &raquo;</a>    
     </span>
     </div>
     <div class="row" itemscope itemtype="http://data-vocabulary.org/Product">
@@ -91,12 +95,11 @@ $(document).ready(function() {
 	        <meta itemprop="quantity" content="{{quantity}}" />
 	        <meta itemprop="identifier" content="{{id}}" />
 	        </span>
-	        <a href="#" id="addtocart" class="btn large primary pull-right">Add to Cart</a>
+			<button id="addtocart" data-loading-text="loading..." data-reset-text="Added! Go to Cart" class="btn large primary pull-right">Add to Cart</button>
         </p>
       </div>
     </div>
     <div class="row">
-    <span class="4">
     <div class="topbar" style="position:static">
       <div class="fill">
         <div class="container">
@@ -109,6 +112,5 @@ $(document).ready(function() {
         </div>
       </div>
     </div>
-          </span> 
     </div>
 {% endblock %}
