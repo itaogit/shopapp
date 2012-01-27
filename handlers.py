@@ -159,20 +159,37 @@ class ProductHandler(BaseHandler):
     def get(self, product=None, category=None, subdomain=None):
         stylesheet = None   #Should be defined in shop model
         currency = 'GBP'    #Should be defined in shop model
-        product_data = Product()
+        from google.appengine.ext import db
+        product_data = Product(stock = 10,
+                               description = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras imperdiet enim ac augue auctor viverra. Phasellus congue tempor justo sed cursus. Quisque non quam turpis. Curabitur mollis luctus tempor. Aliquam sit amet nisl vel arcu rutrum ornare at vel sem.',
+                               name = 'Product',
+                               price = 10.00,
+                               tags = ['keyword1','keyword2','keyword3','keyword4'],
+                               images = [db.BlobKey('AMIfv96K-UYNqA3YFFIEfCGZtf-R7id0JdL6vjxeuIOf_htLh7ojjdsR0SMTRFIYL2Ax8ciV0bxAFd7oOC5xkqh4gGq6qGFZQ2cU3_7x3GVwgz_IumGDNoGrEtxX5YNCszudH8Re67o6oK5_T-aL0g9PVUs4aCtyPw'),
+                                         db.BlobKey('AMIfv96TUHz2REWJf__9p0D3aWSfQUVdJRaD7GjLKiQXeeC5iGVhNtRoo0RZ4Ez_o6EW-zeEyanj6WyUXfrLOQ2TbxxKQlR-u3Omb67M8ljAEzdtw5EgpL6NZ9jotWfMi0Vk3Q5vMLH33vWc-NCS34C5YoMAwVfGlw'),
+                                         db.BlobKey('AMIfv94jnaylMAKY3p9r3M-MrUvePQP4zmvb9OWAruqYerm2K4M4MWK1rxl-yUXcBPbzZyr_ZnxwrF66cDg-FeJgvFVLu4UkVDA5uY0A3bO72jXxOkSk6B7zyelW80RDZkt85pbQVvzTKctfLHzXmtgJCnan7PTvnw'),
+                                         db.BlobKey('AMIfv976U_t-de4wQDlyf_nRlNzqne1PvHfXYnLPuL6W5Lmac1BRbRfDdaT8_PtRSYhTU8-r5deBRRygNLnGLac8cd0vtWFgKCrog0D2bcuZrWkE1kj74JkEoOqb6mRMxfpnz3ZCKJSSqn91xanIh2XTDrAoerE0-g'),
+                                         db.BlobKey('AMIfv94DSiOdBxqxXLLYFxvDjM_SGYtChAIG4GZj_KTgtkDkDyoktnZzaiwp38VmpAeyGZkMBxroM3INcVu5fA125befbbUgcPfCaeyPxvtwIDgVw7cSvIjm0Bu1W3z9LJEY0kC0BIBpdbdfQ32LFFKwqC3esPei4g'),
+                                         db.BlobKey('AMIfv96K-UYNqA3YFFIEfCGZtf-R7id0JdL6vjxeuIOf_htLh7ojjdsR0SMTRFIYL2Ax8ciV0bxAFd7oOC5xkqh4gGq6qGFZQ2cU3_7x3GVwgz_IumGDNoGrEtxX5YNCszudH8Re67o6oK5_T-aL0g9PVUs4aCtyPw'),
+                                         db.BlobKey('AMIfv96TUHz2REWJf__9p0D3aWSfQUVdJRaD7GjLKiQXeeC5iGVhNtRoo0RZ4Ez_o6EW-zeEyanj6WyUXfrLOQ2TbxxKQlR-u3Omb67M8ljAEzdtw5EgpL6NZ9jotWfMi0Vk3Q5vMLH33vWc-NCS34C5YoMAwVfGlw'),
+                                         db.BlobKey('AMIfv94jnaylMAKY3p9r3M-MrUvePQP4zmvb9OWAruqYerm2K4M4MWK1rxl-yUXcBPbzZyr_ZnxwrF66cDg-FeJgvFVLu4UkVDA5uY0A3bO72jXxOkSk6B7zyelW80RDZkt85pbQVvzTKctfLHzXmtgJCnan7PTvnw'),
+                                         db.BlobKey('AMIfv976U_t-de4wQDlyf_nRlNzqne1PvHfXYnLPuL6W5Lmac1BRbRfDdaT8_PtRSYhTU8-r5deBRRygNLnGLac8cd0vtWFgKCrog0D2bcuZrWkE1kj74JkEoOqb6mRMxfpnz3ZCKJSSqn91xanIh2XTDrAoerE0-g'),
+                                         ],
+                               visible = True
+                               )
+        product_data.set_options([{'Size':['Large','Medium','Small']},{'Colour':['Red','White','Blue']}])
+        logging.info(product_data.get_options())
         context = {
                    'shop_id'    :   product_data.shop_id,
                    'shop_name'  :   subdomain,    #Shop Name should be referenced from Shop ID
-                   'id'         :   product_data.product_id,
                    'name'       :   product_data.name,
                    'description':   product_data.description,
-                   'category_id':   product_data.category_id,
                    'category'   :   category,     #Category Name should be referenced from Category ID
                    'price'      :   product_data.price,
                    'images'     :   product_data.images,
                    'tags'       :   product_data.tags,
-                   'quantity'   :   product_data.quantity,
-                   'options'    :   product_data.options,
+                   'quantity'   :   product_data.stock,
+                   'options'    :   product_data.get_options(),
                    'currency'   :   currency,
                    'stylesheet' :   stylesheet,
                    'imagelinker':   image_linker
@@ -207,13 +224,10 @@ class UploadHandler(blobstore_handlers.BlobstoreUploadHandler):
 class ServeHandler(webapp2.RequestHandler):
     def get(self,resource,subdomain=None):
         size = self.request.get("size",480)
-        self.response.out.write(image_linker(self,resource,size,subdomain))
+        self.response.out.write(image_linker(resource,size))
 
 def image_linker(resource,size=480, subdomain=None):
-    image = Image.get_by_key_name(resource)
-    if image:
-        if image.blob_key:
-            return images.get_serving_url(image.blob_key, int(size))
+            return images.get_serving_url(resource, int(size))
         
 class DeleteImageHandler(webapp2.RequestHandler):
     def post(self, image_key=None, subdomain=None):

@@ -72,11 +72,11 @@
 	        <span itemprop="description">{{description}}</span>
 	        <ul class="tags">
 	        {% for i in tags %}
-	        	<li>{{i}}</li>
+	        	<li><a href="/search/{{i}}">{{i}}</a></li>
 	        {% endfor %}
 	        </ul>
 	        {% for option in options %}
-				{% for key,value in option.items() %}
+	        	{% for key,value in option.items() %}
 					<label for="mediumSelect-{{loop.index}}">{{key}}</label>
 					<select class="medium" name="{{key}}Select" id="mediumSelect-{{key}}">
 					{% for i in value %}<option>{{i}}</option>{% endfor %}
@@ -89,7 +89,7 @@
 			{% endfor %}
 	        </select>
 			<span itemprop="offerDetails" itemscope itemtype="http://data-vocabulary.org/Offer">
-	        <p class="price">Price {% if currency == 'GBP' %}&pound;{% else %}&dollar;{% endif %}<span itemprop="price">{{price}}</span></p>
+	        <p class="price">Price {% if currency == 'GBP' %}&pound;{% else %}&dollar;{% endif %}<span itemprop="price">{{'%.2f' % price}}</span></p>
 	        <meta itemprop="availability" content="in_stock" />
 	        <meta itemprop="currency" content="{{currency}}" />
 	        <meta itemprop="quantity" content="{{quantity}}" />
