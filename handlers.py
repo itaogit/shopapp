@@ -9,7 +9,7 @@ from google.appengine.api import images
 from models import Shop, Product, Image, Item
 from google.appengine.api import namespace_manager
 from google.appengine.api import memcache
-#
+from google.appengine.ext import db
 '''End import section'''
 
 class BaseHandler(webapp2.RequestHandler):
@@ -135,29 +135,37 @@ class SiteHandler(BaseHandler):
             stylesheet = 'green'
         else:
             stylesheet = 'default'
-        
+        shop_data = Shop(shopname='Shop Name',
+                         description='Shop description',
+                         )
+        product1 = Product(name='Product1',category='category1',images = [db.BlobKey('AMIfv96K-UYNqA3YFFIEfCGZtf-R7id0JdL6vjxeuIOf_htLh7ojjdsR0SMTRFIYL2Ax8ciV0bxAFd7oOC5xkqh4gGq6qGFZQ2cU3_7x3GVwgz_IumGDNoGrEtxX5YNCszudH8Re67o6oK5_T-aL0g9PVUs4aCtyPw')])
+        product2 = Product(name='Product2',category='category2',images = [db.BlobKey('AMIfv96TUHz2REWJf__9p0D3aWSfQUVdJRaD7GjLKiQXeeC5iGVhNtRoo0RZ4Ez_o6EW-zeEyanj6WyUXfrLOQ2TbxxKQlR-u3Omb67M8ljAEzdtw5EgpL6NZ9jotWfMi0Vk3Q5vMLH33vWc-NCS34C5YoMAwVfGlw')])
+        product3 = Product(name='Product3',category='category3',images = [db.BlobKey('AMIfv94jnaylMAKY3p9r3M-MrUvePQP4zmvb9OWAruqYerm2K4M4MWK1rxl-yUXcBPbzZyr_ZnxwrF66cDg-FeJgvFVLu4UkVDA5uY0A3bO72jXxOkSk6B7zyelW80RDZkt85pbQVvzTKctfLHzXmtgJCnan7PTvnw')])
+        product4 = Product(name='Product4',category='category4',images = [db.BlobKey('AMIfv976U_t-de4wQDlyf_nRlNzqne1PvHfXYnLPuL6W5Lmac1BRbRfDdaT8_PtRSYhTU8-r5deBRRygNLnGLac8cd0vtWFgKCrog0D2bcuZrWkE1kj74JkEoOqb6mRMxfpnz3ZCKJSSqn91xanIh2XTDrAoerE0-g')])
+        product5 = Product(name='Product5',category='category5',images = [db.BlobKey('AMIfv94DSiOdBxqxXLLYFxvDjM_SGYtChAIG4GZj_KTgtkDkDyoktnZzaiwp38VmpAeyGZkMBxroM3INcVu5fA125befbbUgcPfCaeyPxvtwIDgVw7cSvIjm0Bu1W3z9LJEY0kC0BIBpdbdfQ32LFFKwqC3esPei4g')])
+        product6 = Product(name='Product6',category='category6',images = [db.BlobKey('AMIfv96K-UYNqA3YFFIEfCGZtf-R7id0JdL6vjxeuIOf_htLh7ojjdsR0SMTRFIYL2Ax8ciV0bxAFd7oOC5xkqh4gGq6qGFZQ2cU3_7x3GVwgz_IumGDNoGrEtxX5YNCszudH8Re67o6oK5_T-aL0g9PVUs4aCtyPw')])
+        product7 = Product(name='Product7',category='category7',images = [db.BlobKey('AMIfv96TUHz2REWJf__9p0D3aWSfQUVdJRaD7GjLKiQXeeC5iGVhNtRoo0RZ4Ez_o6EW-zeEyanj6WyUXfrLOQ2TbxxKQlR-u3Omb67M8ljAEzdtw5EgpL6NZ9jotWfMi0Vk3Q5vMLH33vWc-NCS34C5YoMAwVfGlw')])
+        product8 = Product(name='Product8',category='category8',images = [db.BlobKey('AMIfv94jnaylMAKY3p9r3M-MrUvePQP4zmvb9OWAruqYerm2K4M4MWK1rxl-yUXcBPbzZyr_ZnxwrF66cDg-FeJgvFVLu4UkVDA5uY0A3bO72jXxOkSk6B7zyelW80RDZkt85pbQVvzTKctfLHzXmtgJCnan7PTvnw')])
+        product9 = Product(name='Product9',category='category9',images = [db.BlobKey('AMIfv976U_t-de4wQDlyf_nRlNzqne1PvHfXYnLPuL6W5Lmac1BRbRfDdaT8_PtRSYhTU8-r5deBRRygNLnGLac8cd0vtWFgKCrog0D2bcuZrWkE1kj74JkEoOqb6mRMxfpnz3ZCKJSSqn91xanIh2XTDrAoerE0-g')])
+        product10 = Product(name='Product10',category='category1',images = [db.BlobKey('AMIfv94DSiOdBxqxXLLYFxvDjM_SGYtChAIG4GZj_KTgtkDkDyoktnZzaiwp38VmpAeyGZkMBxroM3INcVu5fA125befbbUgcPfCaeyPxvtwIDgVw7cSvIjm0Bu1W3z9LJEY0kC0BIBpdbdfQ32LFFKwqC3esPei4g')])
+        product11 = Product(name='Product11',category='category1',images = [db.BlobKey('AMIfv96K-UYNqA3YFFIEfCGZtf-R7id0JdL6vjxeuIOf_htLh7ojjdsR0SMTRFIYL2Ax8ciV0bxAFd7oOC5xkqh4gGq6qGFZQ2cU3_7x3GVwgz_IumGDNoGrEtxX5YNCszudH8Re67o6oK5_T-aL0g9PVUs4aCtyPw')])
+        product12 = Product(name='Product12',category='category1',images = [db.BlobKey('AMIfv96TUHz2REWJf__9p0D3aWSfQUVdJRaD7GjLKiQXeeC5iGVhNtRoo0RZ4Ez_o6EW-zeEyanj6WyUXfrLOQ2TbxxKQlR-u3Omb67M8ljAEzdtw5EgpL6NZ9jotWfMi0Vk3Q5vMLH33vWc-NCS34C5YoMAwVfGlw')])
+        product_data = [product1,product2,product3,product4,
+                        product5,product6,product7,product8,
+                        product9,product10,product11,product12,]
+        categories = []
+        for product in product_data:
+            if product.category not in categories:
+                categories.append(product.category)
         context = {
                 'title': subdomain,
                 'pagecontent': 'this is the ' + subdomain + ' page',
                 #'stylesheet': site.stylesheet,
                 'stylesheet': stylesheet,
-                #######    dummy data    #######
-                'shop_name':    'Shop Name',
-                'shop_description': 'Shop desc',
-                'categories':   ['cat1','cat2','cat3'],
-                'products': [{'name':'product1','category':'category','images':['http://placehold.it/110x110','http://placehold.it/110x110']},                         
-                             {'name':'product2','category':'category','images':['http://placehold.it/110x110','http://placehold.it/110x110']},
-                             {'name':'product3','category':'category','images':['http://placehold.it/110x110','http://placehold.it/110x110']},
-                             {'name':'product4','category':'category','images':['http://placehold.it/110x110','http://placehold.it/110x110']},
-                             {'name':'product5','category':'category','images':['http://placehold.it/110x110','http://placehold.it/110x110']},
-                             {'name':'product6','category':'category','images':['http://placehold.it/110x110','http://placehold.it/110x110']},
-                             {'name':'product7','category':'category','images':['http://placehold.it/110x110','http://placehold.it/110x110']},
-                             {'name':'product8','category':'category','images':['http://placehold.it/110x110','http://placehold.it/110x110']},
-                             {'name':'product9','category':'category','images':['http://placehold.it/110x110','http://placehold.it/110x110']},
-                             {'name':'product10','category':'category','images':['http://placehold.it/110x110','http://placehold.it/110x110']},
-                             {'name':'product11','category':'category','images':['http://placehold.it/110x110','http://placehold.it/110x110']},
-                             {'name':'product12','category':'category','images':['http://placehold.it/110x110','http://placehold.it/110x110']},
-                             ],
+                'shop_name':    shop_data.shopname,
+                'shop_description': shop_data.description,
+                'categories':   categories,
+                'products': product_data,
                 'cart_total':0,
                 'page':1,
                 'pages':6,
@@ -176,20 +184,36 @@ class ProductHandler(BaseHandler):
     def get(self, product=None, category=None, subdomain=None):
         stylesheet = None   #Should be defined in shop model
         currency = 'GBP'    #Should be defined in shop model
-        product_data = Product()
+        product_data = Product(stock = 10,
+                               description = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras imperdiet enim ac augue auctor viverra. Phasellus congue tempor justo sed cursus. Quisque non quam turpis. Curabitur mollis luctus tempor. Aliquam sit amet nisl vel arcu rutrum ornare at vel sem.',
+                               name = 'Product',
+                               price = 10.00,
+                               tags = ['keyword1','keyword2','keyword3','keyword4'],
+                               images = [db.BlobKey('AMIfv96K-UYNqA3YFFIEfCGZtf-R7id0JdL6vjxeuIOf_htLh7ojjdsR0SMTRFIYL2Ax8ciV0bxAFd7oOC5xkqh4gGq6qGFZQ2cU3_7x3GVwgz_IumGDNoGrEtxX5YNCszudH8Re67o6oK5_T-aL0g9PVUs4aCtyPw'),
+                                         db.BlobKey('AMIfv96TUHz2REWJf__9p0D3aWSfQUVdJRaD7GjLKiQXeeC5iGVhNtRoo0RZ4Ez_o6EW-zeEyanj6WyUXfrLOQ2TbxxKQlR-u3Omb67M8ljAEzdtw5EgpL6NZ9jotWfMi0Vk3Q5vMLH33vWc-NCS34C5YoMAwVfGlw'),
+                                         db.BlobKey('AMIfv94jnaylMAKY3p9r3M-MrUvePQP4zmvb9OWAruqYerm2K4M4MWK1rxl-yUXcBPbzZyr_ZnxwrF66cDg-FeJgvFVLu4UkVDA5uY0A3bO72jXxOkSk6B7zyelW80RDZkt85pbQVvzTKctfLHzXmtgJCnan7PTvnw'),
+                                         db.BlobKey('AMIfv976U_t-de4wQDlyf_nRlNzqne1PvHfXYnLPuL6W5Lmac1BRbRfDdaT8_PtRSYhTU8-r5deBRRygNLnGLac8cd0vtWFgKCrog0D2bcuZrWkE1kj74JkEoOqb6mRMxfpnz3ZCKJSSqn91xanIh2XTDrAoerE0-g'),
+                                         db.BlobKey('AMIfv94DSiOdBxqxXLLYFxvDjM_SGYtChAIG4GZj_KTgtkDkDyoktnZzaiwp38VmpAeyGZkMBxroM3INcVu5fA125befbbUgcPfCaeyPxvtwIDgVw7cSvIjm0Bu1W3z9LJEY0kC0BIBpdbdfQ32LFFKwqC3esPei4g'),
+                                         db.BlobKey('AMIfv96K-UYNqA3YFFIEfCGZtf-R7id0JdL6vjxeuIOf_htLh7ojjdsR0SMTRFIYL2Ax8ciV0bxAFd7oOC5xkqh4gGq6qGFZQ2cU3_7x3GVwgz_IumGDNoGrEtxX5YNCszudH8Re67o6oK5_T-aL0g9PVUs4aCtyPw'),
+                                         db.BlobKey('AMIfv96TUHz2REWJf__9p0D3aWSfQUVdJRaD7GjLKiQXeeC5iGVhNtRoo0RZ4Ez_o6EW-zeEyanj6WyUXfrLOQ2TbxxKQlR-u3Omb67M8ljAEzdtw5EgpL6NZ9jotWfMi0Vk3Q5vMLH33vWc-NCS34C5YoMAwVfGlw'),
+                                         db.BlobKey('AMIfv94jnaylMAKY3p9r3M-MrUvePQP4zmvb9OWAruqYerm2K4M4MWK1rxl-yUXcBPbzZyr_ZnxwrF66cDg-FeJgvFVLu4UkVDA5uY0A3bO72jXxOkSk6B7zyelW80RDZkt85pbQVvzTKctfLHzXmtgJCnan7PTvnw'),
+                                         db.BlobKey('AMIfv976U_t-de4wQDlyf_nRlNzqne1PvHfXYnLPuL6W5Lmac1BRbRfDdaT8_PtRSYhTU8-r5deBRRygNLnGLac8cd0vtWFgKCrog0D2bcuZrWkE1kj74JkEoOqb6mRMxfpnz3ZCKJSSqn91xanIh2XTDrAoerE0-g'),
+                                         ],
+                               visible = True
+                               )
+        product_data.set_options([{'Size':['Large','Medium','Small']},{'Colour':['Red','White','Blue']}])
+        logging.info(product_data.get_options())
         context = {
                    'shop_id'    :   product_data.shop_id,
                    'shop_name'  :   subdomain,    #Shop Name should be referenced from Shop ID
-                   'id'         :   product_data.product_id,
                    'name'       :   product_data.name,
                    'description':   product_data.description,
-                   'category_id':   product_data.category_id,
                    'category'   :   category,     #Category Name should be referenced from Category ID
                    'price'      :   product_data.price,
                    'images'     :   product_data.images,
                    'tags'       :   product_data.tags,
-                   'quantity'   :   product_data.quantity,
-                   'options'    :   product_data.options,
+                   'quantity'   :   product_data.stock,
+                   'options'    :   product_data.get_options(),
                    'currency'   :   currency,
                    'stylesheet' :   stylesheet,
                    'imagelinker':   image_linker
@@ -224,13 +248,10 @@ class UploadHandler(blobstore_handlers.BlobstoreUploadHandler):
 class ServeHandler(webapp2.RequestHandler):
     def get(self,resource,subdomain=None):
         size = self.request.get("size",480)
-        self.response.out.write(image_linker(self,resource,size,subdomain))
+        self.response.out.write(image_linker(resource,size))
 
 def image_linker(resource,size=480, subdomain=None):
-    image = Image.get_by_key_name(resource)
-    if image:
-        if image.blob_key:
-            return images.get_serving_url(image.blob_key, int(size))
+            return images.get_serving_url(resource, int(size))
         
 class DeleteImageHandler(webapp2.RequestHandler):
     def post(self, image_key=None, subdomain=None):

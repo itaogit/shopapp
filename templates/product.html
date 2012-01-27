@@ -42,10 +42,19 @@
       <div class="span9">
 		<ul class="media-grid">
 		{% for i in images %}
-		<span id="{% if loop.index == 1 %}featured{%else%}thumb{{loop.index}}{% endif %}">
+		{% if loop.index == 1 %}
+		<span id="featured">
 		<li>
-		<a class="custombox" rel="group" href="{{imagelinker(i)}}">
-		<img itemprop="image" src="{% if loop.index == 1 %}{{imagelinker(i)}}" width="480px" height="360px" alt = "{% else %}{{imagelinker(i,'100')}}" width="100px" height="100px" alt = "thumb{% endif %}-{{name}}-{{loop.index}}"/>
+		<a class="custombox" rel="group" href="{{imagelinker(i,'480')}}">
+		<img itemprop="image" src="{% if loop.index == 1 %}{{imagelinker(i,'480')}}" width="480px" height="360px" alt = "{% else %}{{imagelinker(i,'100')}}" width="100px" height="100px" alt = "thumb{% endif %}-{{name}}-{{loop.index}}"/>
+		</a>
+		</li>
+		</span>
+		{% endif %}
+		<span id="thumb">
+		<li>
+		<a class="custombox" rel="group" href="{{imagelinker(i,'480')}}">
+		<img {% if loop.index == 1 %}class="featured-thumb" {% endif %}itemprop="image" src="{{imagelinker(i,'100')}}" width="100px" height="100px" alt = "thumb-{{name}}-{{loop.index}}"/>
 		</a>
 		</li>
 		</span>
@@ -72,11 +81,11 @@
 	        <span itemprop="description">{{description}}</span>
 	        <ul class="tags">
 	        {% for i in tags %}
-	        	<li>{{i}}</li>
+	        	<li><a href="/search/{{i}}">{{i}}</a></li>
 	        {% endfor %}
 	        </ul>
 	        {% for option in options %}
-				{% for key,value in option.items() %}
+	        	{% for key,value in option.items() %}
 					<label for="mediumSelect-{{loop.index}}">{{key}}</label>
 					<select class="medium" name="{{key}}Select" id="mediumSelect-{{key}}">
 					{% for i in value %}<option>{{i}}</option>{% endfor %}
@@ -89,7 +98,7 @@
 			{% endfor %}
 	        </select>
 			<span itemprop="offerDetails" itemscope itemtype="http://data-vocabulary.org/Offer">
-	        <p class="price">Price {% if currency == 'GBP' %}&pound;{% else %}&dollar;{% endif %}<span itemprop="price">{{price}}</span></p>
+	        <p class="price">Price {% if currency == 'GBP' %}&pound;{% else %}&dollar;{% endif %}<span itemprop="price">{{'%.2f' % price}}</span></p>
 	        <meta itemprop="availability" content="in_stock" />
 	        <meta itemprop="currency" content="{{currency}}" />
 	        <meta itemprop="quantity" content="{{quantity}}" />
