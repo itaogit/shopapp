@@ -119,7 +119,7 @@ class SiteHandler(BaseHandler):
         else:
             stylesheet = 'default'
         shop_data = Shop(shopname='Shop Name',
-                         description='Shop escription',
+                         description='Shop description',
                          )
         product1 = Product(name='Product1',category='category1',images = [db.BlobKey('AMIfv96K-UYNqA3YFFIEfCGZtf-R7id0JdL6vjxeuIOf_htLh7ojjdsR0SMTRFIYL2Ax8ciV0bxAFd7oOC5xkqh4gGq6qGFZQ2cU3_7x3GVwgz_IumGDNoGrEtxX5YNCszudH8Re67o6oK5_T-aL0g9PVUs4aCtyPw')])
         product2 = Product(name='Product2',category='category2',images = [db.BlobKey('AMIfv96TUHz2REWJf__9p0D3aWSfQUVdJRaD7GjLKiQXeeC5iGVhNtRoo0RZ4Ez_o6EW-zeEyanj6WyUXfrLOQ2TbxxKQlR-u3Omb67M8ljAEzdtw5EgpL6NZ9jotWfMi0Vk3Q5vMLH33vWc-NCS34C5YoMAwVfGlw')])

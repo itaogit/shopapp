@@ -17,6 +17,14 @@ select {
 	margin-bottom: 20px;
 }
 
-.featured {
+#featured {
 	margin-left: 25px !important;
+}
+
+span#thumb img {
+	opacity: 0.5;
+}
+
+span#thumb img.featured-thumb {
+	opacity: 1.0;
 }
