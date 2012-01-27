@@ -9,3 +9,6 @@ class Product(db.Model):
     tags            = ['keyword1','keyword2','Keyword3', 'keyword4']
     quantity        =  3
     options         = [{'Size':['Large','Medium','Small']},{'Colour':['Red','White','Blue']}]
+    
+    
+    

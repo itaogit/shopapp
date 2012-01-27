@@ -5,7 +5,9 @@
 
 '''
 from __future__ import division
+import settings
 import handlers
+
 from google.appengine.ext import db
     
 class Cart():
@@ -96,12 +98,13 @@ class Cart():
         self.items[ref].price = price
         self.recalc()
      
-    def remove_item(self, ref):
-        self.useonce_applied = False
-        self.voucher_total_bool = False
-        self.voucher = None
-        del self.items[ref]
-        self.recalc()
+    def remove_item(self, item, qty):
+        '''item = Item().id --> Product.key().id_or_name()'''
+        if self.items.has_key(item.id):
+            self.items[item.id].qty -= qty
+            if self.items[item.id].qty <= 0:
+                del self.items[item.id]
+            self.recalc()
         
     def remove_item_by_id(self, id):
         

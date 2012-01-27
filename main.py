@@ -5,7 +5,8 @@ from webapp2_extras import routes
 
 
 ''''''
-
+config = {}
+config['webapp2_extras.sessions'] = {'secret_key': 'g04way'}
 
 
 app = webapp2.WSGIApplication([
@@ -25,6 +26,7 @@ app = webapp2.WSGIApplication([
                                                              webapp2.Route('/add/<item>/<qty>',handler='handlers.AddItemHandler'),
                                                              webapp2.Route('/shoppingarea/<to_cache>',handler='handlers.ShoppingAreaHandler'),
                                                              webapp2.Route('/<category>/<product>',handler='handlers.ProductHandler'),
+                                                             webapp2.Route('/add-to-cart',handler='checkout.AddToCartHandler'),
                                                              ]),
 
     #Testing
@@ -37,7 +39,7 @@ app = webapp2.WSGIApplication([
     #Localhost
     webapp2.Route(r'/', 'handlers.PageHandler'),
     webapp2.Route(r'/([^/]+)', 'handlers.PageHandler'),
-])
+],config=config)
 
 
 def main():
