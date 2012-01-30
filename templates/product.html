@@ -59,6 +59,16 @@
 		</li>
 		</span>
 	    {% endfor %}
+	    {% if video_id %}
+	    <li>
+		<a href="#">
+		<iframe width="480" height="274"
+				src="https://www.youtube-nocookie.com/embed/{{video_id}}?controls=0"
+				frameborder="0" allowfullscreen>
+				</iframe>
+		</a>
+		</li>
+		{% endif %}
 	    </ul>
       </div>
       <div class="span5">
