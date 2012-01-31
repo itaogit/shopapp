@@ -27,6 +27,7 @@ app = webapp2.WSGIApplication([
                                                              webapp2.Route('/shoppingarea/<to_cache>',handler='handlers.ShoppingAreaHandler'),
                                                              webapp2.Route('/<category>/<product>',handler='handlers.ProductHandler'),
                                                              webapp2.Route('/add-to-cart',handler='checkout.AddToCartHandler'),
+                                                             webapp2.Route('/remove-from-cart',handler='checkout.RemoveFromCartHandler')
                                                              ]),
 
     #Testing
@@ -43,8 +44,8 @@ app = webapp2.WSGIApplication([
 
 
 def main():
-  run_wsgi_app(app)
+    run_wsgi_app(app)
 
 
 if __name__ == '__main__':
-  main()
+    main()
