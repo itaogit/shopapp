@@ -83,6 +83,7 @@ class Product(db.Expando):
        * The filtering has to be done at DataStore level
     '''
     images = db.ListProperty(db.BlobKey)
+    video = db.StringProperty()
     tags = db.StringListProperty()
     
     '''STOCK'''

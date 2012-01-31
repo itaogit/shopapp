@@ -6,7 +6,7 @@ from webapp2_extras import jinja2, sessions
 from google.appengine.ext.webapp import blobstore_handlers
 from google.appengine.ext import blobstore
 from google.appengine.api import images
-from models import Shop, Product, Image, Item
+from models import Shop, Product, Image, Item, Category
 from google.appengine.api import namespace_manager
 from google.appengine.api import memcache
 from google.appengine.ext import db
@@ -72,6 +72,12 @@ class CreateShopHandler(BaseHandler):
         else:
             self.response.write('The shop already exists')
             
+class CreateCatHandler(BaseHandler):
+    def get(self, subdomain):       
+        namespace_manager.set_namespace(subdomain)
+        entity = Category(key_name='New Category', categoryname='New Category')
+        entity.put()
+        self.response.write('Category created')           
 
 class AddItemHandler(BaseHandler):
     def get(self, subdomain, item, qty):

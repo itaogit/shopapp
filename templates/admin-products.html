@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+
+{% block title %}Products{% endblock %}
+
+{% block head %}
+<style type="text/css">
+.enterproduct {
+	display:none;
+}
+</style>
+<script type="text/javascript">
+	$(document).ready(function(){
+		$('#enterproduct-btn').click(function(){
+			$(this).hide();	
+			$('.enterproduct').show();
+		});
+	});
+</script>
+{% endblock %}
+
+{% block content %}
+	<div class="page-header">
+    <h1>Products</h1>
+    </div>
+    <div class="row">
+    <div class="span14">
+    <table>
+    <thead>
+    <tr>
+    <th>Name</th>
+    <th>Description</th>
+    <th>Price</th>
+    <th>Tags</th>
+    <th>Video</th>
+    <th>Quantity</th>
+    <th>Visible</th>
+    <th>Category</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for product in products %}
+    <tr>
+    <td>{{product.name}}</td>
+    <td>{{product.description}}</td>
+    <td>{{product.price}}</td>
+    <td>{% for tag in product.tags %}{{tag}},{% endfor %}</td>
+    <td>{{product.video}}</td>
+    <td>{{product.stock}}</td>
+    <td>{% if product.visible == True %}Yes{% else %}No{% endif %}</td>
+    <td>{% for category in product.categories %}{{category.name()}}{% endfor %}</td>
+    <td><a href="#" id="editproduct" class="btn small">Edit</a></td>
+    <td><button><a href="#" id="deleteproduct" class="btn small danger">Delete</a></button></td>
+    </tr>
+    {% endfor %}
+    </tbody>
+    </table>
+    <button class="btn primary large pull-right" id="enterproduct-btn">Add a new product</button>
+    </div>
+    </div>
+    <div class="row enterproduct">
+    <div class="span14">
+    <form action="{{url}}" enctype="multipart/form-data" method="post">
+    <fieldset>
+    <legend>Add a new product</legend>
+	    <label for="name">Product Name:</label>
+	    <div class="input">
+	    	<input type="text" class="xxlarge" name="name" />
+	    	</div>
+		<label for="description">Description:</label>
+		<div class="input">
+		    <textarea class="xxlarge" name="description" rows="3"></textarea>
+		    </div>
+		<label for="price">Price:</label>
+		<div class="input">
+		    <input type="text" class="xxlarge" name="price" />
+		    </div>
+		<label for="tags">Tags:</label>
+		<div class="input">
+		    <input type="text" class="xxlarge" name="tags" />
+		    </div>
+		<label for="video">Video:</label>
+		<div class="input">
+		    <input type="text" class="xxlarge" name="video" />
+		    </div>		    
+		<label for="qty">Quantity:</label>
+		<div class="input">
+		    <input type="text" class="xxlarge" name="qty" />
+		    </div>
+		<label for="visible">Visibile:</label>
+			<div class="input">
+				<ul class="inputs-list">
+			    <li><label><input type="radio" name="visible" value="yes" /><span>Yes</span></label></li>
+			    <li><label><input type="radio" name="visible" value="no" /><span>no</span></label></li>
+			    </ul>
+			</div>
+		<label for="category">Category:</label>
+		    <div class="input">
+		    <select name="category" class="xxlarge">
+		  	<option value="Category Name">Category Names</option>
+		  	<option value="New Category">New Category</option>
+			</select>
+			</div>
+			<button class="btn large primary pull-right" id="addproduct">Add Product</button>
+			</fieldset>
+    </form>
+    </div>
+    </div>
+{% endblock %}
