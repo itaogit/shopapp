@@ -83,79 +83,142 @@ class Product(db.Expando):
        * The filtering has to be done at DataStore level
     '''
     images = db.ListProperty(db.BlobKey)
-    video = db.StringProperty()
     tags = db.StringListProperty()
     
     '''STOCK'''
-    stock = db.IntegerProperty()
-    reserved = db.IntegerProperty()
+    stock = db.IntegerProperty(default=0)
+    reserved = db.IntegerProperty(default=0)
     
     '''JSON OBJECT
         * [{'Size':['Large','Medium','Small']},{'Colour':['Red','White','Blue']},(...)]
         * It needs of serialization and deserealization before storing and getting operations
     '''
-    _options = db.StringProperty()
+    options = db.StringProperty()
     created = db.DateTimeProperty(auto_now_add=True)
     updated = db.DateTimeProperty(auto_now=True)
     visible = db.BooleanProperty(default=False)
     ''' Category - Product (Many to Many relationship)'''
     categories = db.ListProperty(db.Key)
     
+    
+    
     #options (private variable)
-    def set_options(self, data):
-        self._options = json.dumps(data)
-    def get_options(self):
-        return json.loads(self._options)
+    def set_options(self, name, data):
+        def txn():
+            instance = self.get_by_key_name(name)
+            instance._options = json.dumps(data)
+            instance.put()
+        return db.run_in_transaction(txn)
+    def get_options(self, name):
+        instance = self.get_by_key_name(name)
+        return json.loads(instance._options)
+        
     
     #stock access
     @classmethod
-    def add_stock(self,qty):
-        self.stock += qty
+    def add_stock(cls,name,qty):
+        instance = cls.get_by_key_name(name)
+        instance.stock +=  qty
+        instance.put()
     @classmethod
-    def remove_stock(self,qty):
-        if qty > self.stock: raise ValueError, "Stock insufficient"
-        else:
-            self.reserved -= qty 
-            self.stock -= qty
+    def remove_stock(self,name,qty):
+        def txn():
+            instance = self.get_by_key_name(name)
+            if qty > instance.stock: 
+                #Stock insufficient
+                return False
+            else:
+                instance.reserved -= qty 
+                instance.stock -= qty
+                instance.put()
+                return True
+        return db.run_in_transaction(txn)
     @classmethod
-    def reserve(self,qty):
-        if (self.stock - self.reserved - qty) >= 0:
-            self.stock -= qty
-            self.reserved += qty
-            return True
-        else:
+    def reserve(self,name,qty):
+        def txn():
+            instance = self.get_by_key_name(name)
+            
+            if (instance.stock - instance.reserved - qty) >= 0:
+                
+                instance.reserved += qty
+                instance.put()
+                return True
+            else:
+                return False
+        return db.run_in_transaction(txn)
+    
+    @classmethod
+    def unreserve(self,name,qty):
+        def txn():
+            instance = self.get_by_key_name(name)
+            if instance.reserved >= qty:
+                instance.reserved -= qty
+                
+                instance.put()
+                return True
+            else:
+                instance.reserved = 0
+                instance.put()
+                return True
             return False
+        return db.run_in_transaction(txn)
+    @property
+    def available(self,name):
+        instance = self.get_by_key_name(name)
+        return instance.stock - instance.reserved
     #price
     @property
-    def final_price(self):
-        return self.price + self.price * self.tax_percent /100
+    def total_price(self, name):
+        instance = self.get_by_key_name(name)
+        return instance.price + instance.price * instance.tax_percent /100
     
     #tagging
-    def set_tag(self, data, index):
-        self.tags[index] = data
+    def set_tag(self,name, data, index):
+        def txn():
+            instance = self.get_by_key_name(name)
+            instance.tags[index] = data
+            instance.put()
+        return db.run_in_transaction(txn)
     
     #Image access
-    def add_image(self, blob_key, index):
-        self.images[index] = data
-    def delete_image(self, index):
-        del self.images[index]
+    def add_image(self,name, blob_key, index):
+        def txn():
+            instance = self.get_by_key_name(name)
+            instance.images[index] = blob_key
+            instance.put()
+        return db.run_in_transaction(txn)
+    def delete_image(self,name, index):
+        def txn():
+            instance = self.get_by_key_name(name)
+            del instance.images[index]
+            instance.put()
+        return db.run_in_transaction(txn)
         
-    def get_image(self, index, size=None):
-        return get_serving_url(self.images[index], size)
+    def get_image(self,name, index, size=None):
+        instance = self.get_by_key_name(name)
+        return get_serving_url(instance.images[index], size)
     
-    def get_images(self, size=None):
+    def get_images(self,name, size=None):
         serving_urls = []
-        for k in self.images:
+        instance = self.get_by_key_name(name)
+        for k in instance.images:
             serving_urls.append(get_serving_url(k, size))
         return serving_urls
     
     
-    def set_new_price(self, price):
-        self.price = price
+    def set_new_price(self,name, price):
+        def txn():
+            instance = self.get_by_key_name()
+            instance.price = price
+            instance.put()
+        return db.run_in_transaction(txn)
     
-    
-    def set_description(self, description):
-        self.description = description
+    def set_description(self,name, description):
+        def txn():
+            instance = self.get_by_key_name(name)
+            instance.description = description
+            instance.put()
+        return db.run_in_transaction(txn)
     
     #categories
     def add_to_category(self, cat):
@@ -169,7 +232,7 @@ class Product(db.Expando):
             self.categories.remove(cat)
     
     @staticmethod
-    def get_by_name(cls, n):
+    def get_by_name(cls,n):
         return cls.get_by_key_name(n)
 
     
