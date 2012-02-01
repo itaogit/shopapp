@@ -44,7 +44,7 @@ class AddToCartHandler(BaseHandler):
         
         product = Product.get_by_key_name(item)
         if not product: return self.response.write('The product does not exist')
-        elif Product.reserve(item,qty): 
+        elif product.reserve(qty): 
             '''Checked stock'''
             cart.add_item(CartItem(product),qty)
         else:
@@ -82,7 +82,7 @@ class RemoveFromCartHandler(BaseHandler):
         product = Product.get_by_key_name(item)
         
         if not product: return self.response.write('The product does not exist')
-        elif Product.unreserve(item,qty):
+        elif product.unreserve(qty):
             '''It was not removed from stock'''
             cart.remove_item(CartItem(product),qty)
         else:

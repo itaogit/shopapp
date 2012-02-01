@@ -133,91 +133,89 @@ class Product(db.Expando):
                 instance.put()
                 return True
         return db.run_in_transaction(txn)
-    @classmethod
-    def reserve(self,name,qty):
+    
+    def reserve(self,qty):
+        
         def txn():
-            instance = self.get_by_key_name(name)
             
-            if (instance.stock - instance.reserved - qty) >= 0:
+            
+            if (self.stock - self.reserved - qty) >= 0:
                 
-                instance.reserved += qty
-                instance.put()
+                self.reserved += qty
+                self.put()
                 return True
             else:
                 return False
         return db.run_in_transaction(txn)
     
     @classmethod
-    def unreserve(self,name,qty):
+    def unreserve(self,qty):
         def txn():
-            instance = self.get_by_key_name(name)
-            if instance.reserved >= qty:
-                instance.reserved -= qty
+            
+            if self.reserved >= qty:
+                self.reserved -= qty
                 
-                instance.put()
+                self.put()
                 return True
             else:
-                instance.reserved = 0
-                instance.put()
+                self.reserved = 0
+                self.put()
                 return True
             return False
         return db.run_in_transaction(txn)
     @property
-    def available(self,name):
-        instance = self.get_by_key_name(name)
-        return instance.stock - instance.reserved
+    def available(self):
+        return self.stock - self.reserved
     #price
     @property
-    def total_price(self, name):
-        instance = self.get_by_key_name(name)
-        return instance.price + instance.price * instance.tax_percent /100
+    def total_price(self):
+        
+        return self.price + self.price * self.tax_percent /100
     
     #tagging
-    def set_tag(self,name, data, index):
+    def set_tag(self, data, index):
         def txn():
-            instance = self.get_by_key_name(name)
-            instance.tags[index] = data
-            instance.put()
+            self.tags[index] = data
+            self.put()
         return db.run_in_transaction(txn)
     
     #Image access
-    def add_image(self,name, blob_key, index):
+    def add_image(self, blob_key, index):
         def txn():
-            instance = self.get_by_key_name(name)
-            instance.images[index] = blob_key
-            instance.put()
+            
+            self.images[index] = blob_key
+            self.put()
         return db.run_in_transaction(txn)
-    def delete_image(self,name, index):
+    def delete_image(self, index):
         def txn():
-            instance = self.get_by_key_name(name)
-            del instance.images[index]
-            instance.put()
+            
+            del self.images[index]
+            self.put()
         return db.run_in_transaction(txn)
         
-    def get_image(self,name, index, size=None):
-        instance = self.get_by_key_name(name)
-        return get_serving_url(instance.images[index], size)
+    def get_image(self, index, size=None):
+        
+        return get_serving_url(self.images[index], size)
     
-    def get_images(self,name, size=None):
+    def get_images(self, size=None):
         serving_urls = []
-        instance = self.get_by_key_name(name)
-        for k in instance.images:
+        
+        for k in self.images:
             serving_urls.append(get_serving_url(k, size))
         return serving_urls
     
     
-    def set_new_price(self,name, price):
+    def set_new_price(self, price):
         def txn():
-            instance = self.get_by_key_name()
-            instance.price = price
-            instance.put()
+            
+            self.price = price
+            self.put()
         return db.run_in_transaction(txn)
     
-    def set_description(self,name, description):
+    def set_description(self, description):
         def txn():
-            instance = self.get_by_key_name(name)
-            instance.description = description
-            instance.put()
+            self.description = description
+            self.put()
         return db.run_in_transaction(txn)
     
     #categories
@@ -225,11 +223,13 @@ class Product(db.Expando):
         '''cat = key() !!'''
         if cat not in self.categories:
             self.categories.append(cat)
+            self.put()
     
     def remove_from_category(self, cat):
         '''cat = key() !!'''
         if cat in self.categories:
             self.categories.remove(cat)
+            self.put()
     
     @staticmethod
     def get_by_name(cls,n):
