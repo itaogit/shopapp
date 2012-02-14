@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+<div class="row">
+    <div class="span4">
+		<form class="pull-left" action="/search">
+            <input name ="search_input" type="text" placeholder="Search">
+    	</form>
+    </div>
+</div>
+<br>
+<br>
+<div class="span10">
+	      <ul class="media-grid">
+	      {% for product in products %}
+	      <li><a href="{{product.category}}/{{product.name}}">
+	      <img class="thumbnail" src="{{imagelinker(product.images[0],'110')}}" width=110px height=110px ] title="{{product.description}}"></a>
+	      <img class="quickadd" src="images/icons/plus_alt_24x24.png" />
+	      </li>
+	      {% endfor %}
+	      </ul>		
+      </div>
+      
+{% endblock %}
