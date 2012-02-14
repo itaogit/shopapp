@@ -3,6 +3,7 @@ import json
 import webapp2
 import google.appengine.api.images
 from google.appengine.ext import db
+import google.appengine.ext.search as search
 
 class Shop(db.Model):
     shopname = db.StringProperty()
@@ -44,6 +45,12 @@ class Shop(db.Model):
     Replaceable Images
     
 '''
+class Design(db.Model):
+    css_template = db.StringProperty()
+    banner = db.BlobProperty()
+    home_page = db.StringProperty()
+    product_page = db.StringProperty()
+    options = db.StringProperty()
 
    
 
@@ -69,7 +76,7 @@ class Category(db.Model):
     def get_delivery(self):
         return json.loads(self._price_of_delivery)
 
-class Product(db.Expando):
+class Product(search.SearchableModel, db.Expando):
     '''The properties of an Expando class are dynamic and can be added in runtime'''
     
     shop_id = db.ReferenceProperty()
@@ -103,15 +110,15 @@ class Product(db.Expando):
     
     
     #options (private variable)
-    def set_options(self, name, data):
+    def set_options(self, data):
         def txn():
-            instance = self.get_by_key_name(name)
-            instance._options = json.dumps(data)
-            instance.put()
+            
+            self.options = json.dumps(data)
+            self.put()
         return db.run_in_transaction(txn)
-    def get_options(self, name):
-        instance = self.get_by_key_name(name)
-        return json.loads(instance._options)
+    def get_options(self):
+        
+        return json.loads(self.options)
         
     
     #stock access
@@ -235,7 +242,9 @@ class Product(db.Expando):
     def get_by_name(cls,n):
         return cls.get_by_key_name(n)
 
-    
+    @classmethod
+    def searchableProperties(cls):
+        return [['name', 'description'], ['name']]
 
 ''' Order Model represents a users purchase '''
 class Order(db.Model):

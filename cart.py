@@ -134,10 +134,10 @@ class Cart():
         self.total += self.total_delivery
         self.total_without_tax = self.total_without_tax + self.delivery['price']
     
-    def toString(self):
+    def __repr__(self):
         chain = ''
         for item,value in self.items.items():
-            chain += str(self.items[item].toString)
+            chain += str(str(self.items[item]))
             #chain += '<br>'+'Product: '+str(self.items[item].id)+' Price: '+str(self.items[item].price)+' Tax: '+str(self.items[item].tax)+' Qty: '+str(self.items[item].qty)+'</br>'
         #Totals
         chain += '<br>Total(Tax inc.): '+str(self.total)+' Tax: '+str(self.total_tax)+'</br>'
@@ -162,7 +162,7 @@ class CartItem():
     def tax_amount(self):
         return self.price * self.tax / 100
     
-    @property
-    def toString(self):
+    
+    def __repr__(self):
         
         return '<br>'+'Product: '+self.id+' Price: '+str(self.price)+' Tax: '+str(self.tax)+' Qty: '+str(self.qty)+'</br>'

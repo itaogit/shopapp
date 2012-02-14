@@ -2,7 +2,7 @@
 import webapp2
 import main
 import logging
-from webapp2_extras import jinja2, sessions
+from webapp2_extras import jinja2, sessions, users
 from google.appengine.ext.webapp import blobstore_handlers
 from google.appengine.ext import blobstore
 from google.appengine.api import images
@@ -80,10 +80,11 @@ class CreateCatHandler(BaseHandler):
         entity.put()
         self.response.write('Category created')           
 
-class AddItemHandler(BaseHandler):
+class AddProductHandler(BaseHandler):
     def get(self, subdomain, item, qty):
         namespace_manager.set_namespace(subdomain)
-        entity = Item(key_name=item, name=item, qty=int(qty))
+        description = self.request.get('desc', '')
+        entity = Product(key_name=item, name=item, stock=int(qty), price=10.0, tax_percent=13.0, description=description)
         entity.put()
         self.response.write('Done') 
 
@@ -209,7 +210,7 @@ class ProductHandler(BaseHandler):
                                visible = True
                                )
         product_data.set_options([{'Size':['Large','Medium','Small']},{'Colour':['Red','White','Blue']}])
-        logging.info(product_data.get_options())
+        #logging.info(product_data.get_options())
         context = {
                    'shop_id'    :   product_data.shop_id,
                    'shop_name'  :   subdomain,    #Shop Name should be referenced from Shop ID
@@ -258,7 +259,11 @@ class ServeHandler(webapp2.RequestHandler):
         self.response.out.write(image_linker(resource,size))
 
 def image_linker(resource,size=480, subdomain=None):
-            return images.get_serving_url(resource, int(size))
+    try:
+        return images.get_serving_url(resource, int(size))
+    except:
+        return '/images/no_image.png'
+        
         
 class DeleteImageHandler(webapp2.RequestHandler):
     def post(self, image_key=None, subdomain=None):

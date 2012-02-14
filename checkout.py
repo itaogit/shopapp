@@ -20,11 +20,25 @@ class AddToCartHandler(BaseHandler):
         namespace_manager.set_namespace(subdomain)
         
         '''Name of the memcache'''
+        logging.info(str(self.session))
+        #cookie_value = self.request.cookies.get('shopapp-cart')
+        #logging.info(str(cookie_value))
+        '''logging.info(cookie_value)
+        if not cookie_value:
+            
+            #random number
+            import random, string
+            cookie_value = ''.join(random.choice(string.ascii_uppercase + '123456789') for i in xrange(10))
+        self.response.set_cookie(key='shopapp-cart', value=cookie_value,max_age=900)
+            
+            logging.info(str(self.request.cookies.get('shopapp-cart')))'''
         
-        self.session = self.session_store.get_session(name='mc_session',max_age=900,backend='memcache')
+        #self.response.set_cookie(key='guille', value='el mejor',max_age=900)
+        self.session = self.session_store.get_session(name='shopapp',max_age=None,backend='memcache')
+        logging.info(str(self.session))
         #15 mins session (900 secs), if a previous session does not exist it creates a new one
         #self.session = self.session_store.get_session(name='mc_session',max_age=900,backend='memcache')
-        
+        #logging.info(cookie_value)
         
         
         try:
@@ -57,7 +71,7 @@ class AddToCartHandler(BaseHandler):
         '''NAMESPACE CHANGE'''
         namespace_manager.set_namespace(namespace)
         
-        return self.response.write(cart.toString())
+        return self.response.write(str(cart))
         
 
 class RemoveFromCartHandler(BaseHandler):
@@ -94,5 +108,5 @@ class RemoveFromCartHandler(BaseHandler):
         '''NAMESPACE CHANGE'''
         namespace_manager.set_namespace(namespace)
         
-        return self.response.write(cart.toString())
+        return self.response.write(str(cart))
     
