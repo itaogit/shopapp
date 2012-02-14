@@ -4,10 +4,12 @@ import logging
 from models import Product, Shop, Category
 from handlers import BaseHandler
 from google.appengine.api import namespace_manager
+from users import admin_required, login_required
 '''End import section'''
 
 
 class ProductHandler(BaseHandler):
+    #@login_required
     def get(self, subdomain):
         namespace_manager.set_namespace(subdomain)
         products = Product.all()
