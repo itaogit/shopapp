@@ -5,13 +5,23 @@ import google.appengine.api.images
 from google.appengine.ext import db
 import google.appengine.ext.search as search
 
+
+class Design(db.Model):
+    #shop = db.Reference(Shop, collection_name='design')
+    css_product = db.StringProperty()
+    css_home = db.StringProperty()
+    banner = db.BlobProperty()
+    home_template = db.StringProperty()
+    product_template = db.StringProperty()
+    options = db.StringProperty()
+
+
 class Shop(db.Model):
     shopname = db.StringProperty()
     owner = db.ReferenceProperty() #User Reference
     times_visited = db.IntegerProperty()
     currency = db.StringProperty()
     created = db.DateTimeProperty(auto_now_add=True)
-    updated = db.DateTimeProperty(auto_now=True)
     '''Editable Features'''
     logo = db.BlobProperty()
     description = db.TextProperty()
@@ -35,8 +45,8 @@ class Shop(db.Model):
     paypal_username = db.StringProperty(default=None)
     paypal_password = db.StringProperty(default=None)
     paypal_signature = db.StringProperty(default=None)
-
-
+    design = db.ReferenceProperty(Design)
+    
 
 
 '''Style/Template configuration, more models'''
@@ -45,13 +55,9 @@ class Shop(db.Model):
     Replaceable Images
     
 '''
-class Design(db.Model):
-    css_template = db.StringProperty()
-    banner = db.BlobProperty()
-    home_page = db.StringProperty()
-    product_page = db.StringProperty()
-    options = db.StringProperty()
 
+
+    
    
 
 

@@ -46,7 +46,7 @@ $(document).ready(function() {
 	      <ul class="media-grid">
 	      {% for product in products %}
 	      <li><a href="{{product.category}}/{{product.name}}">
-	      <img class="thumbnail" src="{{imagelinker(product.images[0],'110')}}" width=110px height=110px ]alt="{{product.name}}"></a>
+	      <img class="thumbnail" src="{{imagelinker(product.images[0],'110')}}" width=110px height=110px ] title="{{product.description}}" alt="{{product.name}}"></a>
 	      <img class="quickadd" src="images/icons/plus_alt_24x24.png" />
 	      </li>
 	      {% endfor %}

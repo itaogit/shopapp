@@ -12,7 +12,7 @@ from models import Product
 
 
 class SearchHandler(BaseHandler):
-    def get(self, subdomain, **kwargs):
+    def get(self, subdomain):
         '''query'''
         search = self.request.get('search_input')
         
@@ -21,7 +21,7 @@ class SearchHandler(BaseHandler):
         ''''''
         
         query = Product.all().search(search)
-        logging.info(str(query.count()))
+        
         context = {'products':query,
                    'imagelinker':image_linker}
         

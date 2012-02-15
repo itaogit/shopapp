@@ -20,6 +20,7 @@ app = webapp2.WSGIApplication([
                                                              
                                                              webapp2.Route('/admin',handler='checkout.RemoveFromCartHandler'),
                                                              webapp2.Route('/admin/login', handler='admin.LoginHandler',name='loginadmin'),
+                                                             webapp2.Route('/admin/change-style', handler='admin.ChangeStyleHandler',name='loginadmin'),
                                                              webapp2.Route('/admin/products',handler='admin.ProductHandler', name="addproducts"),
                                                              webapp2.Route('/imageupload', handler='handlers.ImageUploadHandler', name='imageupload'),
                                                              webapp2.Route('/search', handler='search.SearchHandler', name='search'),
@@ -30,7 +31,7 @@ app = webapp2.WSGIApplication([
                                                              webapp2.Route('/create',handler='handlers.CreateShopHandler'),
                                                              webapp2.Route('/createcat',handler='handlers.CreateCatHandler'),
                                                              webapp2.Route('/add/<item>/<qty>',handler='handlers.AddProductHandler'),
-                                                             webapp2.Route('/add/<item>/<qty>/<description>',handler='handlers.AddProductHandler'),
+                                            
                                                              webapp2.Route('/shoppingarea/<to_cache>',handler='handlers.ShoppingAreaHandler'),
                                                              webapp2.Route('/<category>/<product>',handler='handlers.ProductHandler'),
                                                              webapp2.Route('/add-to-cart',handler='checkout.AddToCartHandler'),
@@ -47,6 +48,7 @@ app = webapp2.WSGIApplication([
     
     #Localhost
     webapp2.Route(r'/', 'handlers.PageHandler'),
+    webapp2.Route(r'/create_styles', 'handlers.CreateStyle'),
     webapp2.Route(r'/([^/]+)', 'handlers.PageHandler'),
 ],config=config)
 

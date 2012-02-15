@@ -43,7 +43,7 @@ class BaseHandler(webapp2.RequestHandler):
 
 class PageHandler(BaseHandler):
     def get(self, page='home'):
-        self.session()
+        #self.session()
         
         context = {
             'title': page,
@@ -173,7 +173,7 @@ class SiteHandler(BaseHandler):
                 'shop_name':    shop_data.shopname,
                 'shop_description': shop_data.description,
                 'categories':   categories,
-                'products': product_data,
+                'products': Product().all(),
                 'cart_total':0,
                 'page':1,
                 'pages':6,

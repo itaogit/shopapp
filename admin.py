@@ -1,7 +1,7 @@
 '''Import section'''
 import webapp2
 import logging
-from models import Product, Shop, Category
+from models import Product, Shop, Category, Design
 from handlers import BaseHandler
 from google.appengine.api import namespace_manager
 from users import admin_required, login_required
@@ -45,3 +45,22 @@ class ProductHandler(BaseHandler):
                               )
         entity.put()
         self.redirect(webapp2.uri_for('addproducts'))
+        
+        
+    
+class ChangeStyleHandler(BaseHandler):
+    
+    #@login_required
+    def get(self, subdomain):
+        namespace_manager.set_namespace(subdomain)
+        shop = Shop.all().get()
+        designs = Design.all()
+        context = {
+                   'url':webapp2.uri_for('addproducts'),
+                   'designs':designs,
+                   'shop':shop,
+                   }
+        self.render_response('admin-products.html',**context)
+    def post(self, subdomain):
+        
+    
